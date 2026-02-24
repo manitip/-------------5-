@@ -76,13 +76,13 @@ export default function PrayerForm() {
 
   if (status === "sent") {
     return (
-      <div className="space-y-4">
-        <div className="text-lg font-semibold">Запрос отправлен</div>
-        <p className="text-sm leading-relaxed text-[#A7B3C2]">
+      <div className="prayer-success">
+        <div className="prayer-success-title">Запрос отправлен</div>
+        <p className="prayer-success-text">
           Спасибо, что написали. Мы получили ваш запрос и будем молиться.
           Если вы оставили email — можно получить подтверждение.
         </p>
-        <div className="flex flex-wrap gap-3">
+        <div className="prayer-success-actions">
           <Button onClick={() => location.reload()}>Отправить ещё один запрос</Button>
           <Button href="/" variant="ghost">На главную</Button>
         </div>
@@ -91,12 +91,12 @@ export default function PrayerForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-5">
-      <div className="grid gap-4 md:grid-cols-2">
-        <label className="grid gap-2 text-sm">
-          <span className="text-[#A7B3C2]">Тема / категория</span>
+    <form onSubmit={onSubmit} className="prayer-form">
+      <div className="prayer-grid-two">
+        <label className="prayer-field">
+          <span className="prayer-label">Тема / категория</span>
           <select
-            className="rounded-xl bg-white/0 p-3 ring-1 ring-white/10 focus:ring-2 focus:ring-[#22D3EE]/60"
+            className="prayer-input"
             value={category}
             onChange={(e) => setCategory(e.target.value as any)}
             aria-label="Категория"
@@ -109,10 +109,10 @@ export default function PrayerForm() {
           </select>
         </label>
 
-        <label className="grid gap-2 text-sm">
-          <span className="text-[#A7B3C2]">Срочность</span>
+        <label className="prayer-field">
+          <span className="prayer-label">Срочность</span>
           <select
-            className="rounded-xl bg-white/0 p-3 ring-1 ring-white/10 focus:ring-2 focus:ring-[#22D3EE]/60"
+            className="prayer-input"
             value={urgency}
             onChange={(e) => setUrgency(e.target.value as any)}
             aria-label="Срочность"
@@ -123,15 +123,15 @@ export default function PrayerForm() {
         </label>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <label className="grid gap-2 text-sm">
-          <span className="text-[#A7B3C2]">За себя или за другого</span>
-          <div className="flex gap-2">
+      <div className="prayer-grid-two">
+        <label className="prayer-field">
+          <span className="prayer-label">За себя или за другого</span>
+          <div className="prayer-switch-row">
             <button
               type="button"
               onClick={() => setForWhom("self")}
-              className={`flex-1 rounded-xl p-3 text-sm ring-1 ${
-                forWhom === "self" ? "bg-white/10 ring-white/20" : "bg-white/0 ring-white/10 hover:bg-white/5"
+              className={`prayer-choice-btn ${
+                forWhom === "self" ? "prayer-choice-btn-active" : ""
               }`}
             >
               За себя
@@ -139,8 +139,8 @@ export default function PrayerForm() {
             <button
               type="button"
               onClick={() => setForWhom("other")}
-              className={`flex-1 rounded-xl p-3 text-sm ring-1 ${
-                forWhom === "other" ? "bg-white/10 ring-white/20" : "bg-white/0 ring-white/10 hover:bg-white/5"
+              className={`prayer-choice-btn ${
+                forWhom === "other" ? "prayer-choice-btn-active" : ""
               }`}
             >
               За другого
@@ -148,23 +148,23 @@ export default function PrayerForm() {
           </div>
         </label>
 
-        <label className="flex items-center gap-3 rounded-xl bg-white/0 p-3 ring-1 ring-white/10">
+        <label className="prayer-check-row prayer-check-soft">
           <input
             type="checkbox"
             checked={anonymous}
             onChange={(e) => setAnonymous(e.target.checked)}
-            className="h-4 w-4 accent-[#22D3EE]"
+            className="prayer-checkbox"
           />
-          <span className="text-sm text-[#A7B3C2]">Анонимно (скрыть имя и контакт)</span>
+          <span className="prayer-label">Анонимно (скрыть имя и контакт)</span>
         </label>
       </div>
 
       {!anonymous && (
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="grid gap-2 text-sm">
-            <span className="text-[#A7B3C2]">Имя (необязательно)</span>
+        <div className="prayer-grid-two">
+          <label className="prayer-field">
+            <span className="prayer-label">Имя (необязательно)</span>
             <input
-              className="rounded-xl bg-white/0 p-3 ring-1 ring-white/10 focus:ring-2 focus:ring-[#22D3EE]/60"
+              className="prayer-input"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Например: Анна"
@@ -172,10 +172,10 @@ export default function PrayerForm() {
             />
           </label>
 
-          <label className="grid gap-2 text-sm">
-            <span className="text-[#A7B3C2]">Email для подтверждения (необязательно)</span>
+          <label className="prayer-field">
+            <span className="prayer-label">Email для подтверждения (необязательно)</span>
             <input
-              className="rounded-xl bg-white/0 p-3 ring-1 ring-white/10 focus:ring-2 focus:ring-[#22D3EE]/60"
+              className="prayer-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
@@ -185,15 +185,15 @@ export default function PrayerForm() {
         </div>
       )}
 
-      <label className="grid gap-2 text-sm">
-        <span className="flex items-center justify-between gap-3">
-          <span className="text-[#A7B3C2]">Текст ситуации (обязательно)</span>
-          <span className={`text-xs ${okLen ? "text-[#A7B3C2]" : "text-red-300"}`}>
+      <label className="prayer-field">
+        <span className="prayer-message-label-row">
+          <span className="prayer-label">Текст ситуации (обязательно)</span>
+          <span className={`prayer-counter ${okLen ? "" : "prayer-counter-invalid"}`}>
             {count}/1500 (мин. 300)
           </span>
         </span>
         <textarea
-          className="min-h-[170px] rounded-2xl bg-white/0 p-4 text-sm leading-relaxed ring-1 ring-white/10 focus:ring-2 focus:ring-[#22D3EE]/60"
+          className="prayer-input prayer-textarea"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Можно кратко. Напишите так, как получается."
@@ -209,17 +209,17 @@ export default function PrayerForm() {
         </label>
       </div>
 
-      <label className="flex items-start gap-3 rounded-xl bg-white/0 p-3 ring-1 ring-white/10">
+      <label className="prayer-check-row prayer-check-soft">
         <input
           type="checkbox"
           checked={consent}
           onChange={(e) => setConsent(e.target.checked)}
-          className="mt-1 h-4 w-4 accent-[#19C37D]"
+          className="prayer-checkbox prayer-checkbox-consent"
           aria-label="Согласие с политикой"
         />
-        <span className="text-sm text-[#A7B3C2]">
+        <span className="prayer-label">
           Я согласен(на) с{" "}
-          <a className="text-[#E6EEF7] underline decoration-white/30 hover:decoration-white" href="/privacy">
+          <a className="prayer-link" href="/privacy">
             политикой конфиденциальности
           </a>
           .
@@ -227,14 +227,14 @@ export default function PrayerForm() {
       </label>
 
       {status === "error" && (
-        <div className="rounded-xl bg-red-500/10 p-3 text-sm text-red-200 ring-1 ring-red-400/20">{err}</div>
+        <div className="prayer-error">{err}</div>
       )}
 
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="prayer-actions">
         <Button type="submit" disabled={disabled}>
           {status === "sending" ? "Отправка..." : "Отправить"}
         </Button>
-        <div className="text-xs text-[#A7B3C2]">Не обещаем результата, но обещаем бережное отношение.</div>
+        <div className="prayer-note">Не обещаем результата, но обещаем бережное отношение.</div>
       </div>
     </form>
   );

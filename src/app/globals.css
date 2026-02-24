@@ -72,6 +72,75 @@ a { color: inherit; text-decoration: none; }
 .how-works-note-title { font-size: 1rem; font-weight: 700; }
 .how-works-note-text { margin: .55rem 0 0; line-height: 1.65; color: var(--muted); }
 
+.request-page { display: grid; gap: 1rem; }
+.request-hero { padding: .35rem 0 .25rem; }
+.request-title { margin: 0; font-size: clamp(2rem, 4vw, 2.6rem); line-height: 1.12; }
+.request-subtitle { margin: .85rem 0 0; max-width: 68ch; line-height: 1.65; color: var(--muted); }
+.request-form-card { padding: 1.1rem; }
+.request-privacy-card { padding: 1.1rem; }
+.request-privacy-title { font-weight: 700; }
+.request-privacy-list { margin: .7rem 0 0; padding-left: 1.2rem; color: var(--muted); display: grid; gap: .45rem; }
+
+.prayer-form { display: grid; gap: 1rem; }
+.prayer-grid-two { display: grid; gap: .85rem; }
+.prayer-field { display: grid; gap: .45rem; font-size: .95rem; }
+.prayer-label { color: var(--muted); line-height: 1.45; }
+.prayer-input {
+  border-radius: .85rem;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(6,13,23,.52);
+  color: var(--text);
+  padding: .75rem .85rem;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.prayer-input:focus {
+  outline: none;
+  border-color: rgba(34,211,238,.7);
+  box-shadow: 0 0 0 3px rgba(34,211,238,.16);
+  background: rgba(9,17,29,.75);
+}
+.prayer-textarea { min-height: 220px; resize: vertical; line-height: 1.55; }
+.prayer-switch-row { display: flex; gap: .55rem; }
+.prayer-choice-btn {
+  flex: 1;
+  border-radius: .75rem;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.01);
+  color: var(--text);
+  padding: .65rem .75rem;
+  font-size: .93rem;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease;
+}
+.prayer-choice-btn:hover { background: rgba(255,255,255,.07); }
+.prayer-choice-btn-active {
+  border-color: rgba(34,211,238,.48);
+  background: linear-gradient(180deg, rgba(34,211,238,.2), rgba(34,211,238,.08));
+}
+.prayer-check-row { display: flex; gap: .65rem; align-items: flex-start; }
+.prayer-check-soft { padding: .75rem .85rem; border: 1px solid rgba(255,255,255,.1); border-radius: .85rem; background: rgba(255,255,255,.02); }
+.prayer-checkbox { width: 1rem; height: 1rem; margin-top: .18rem; accent-color: #22D3EE; }
+.prayer-checkbox-consent { accent-color: #19C37D; }
+.prayer-message-label-row { display: flex; justify-content: space-between; gap: .75rem; align-items: center; }
+.prayer-counter { font-size: .78rem; color: var(--muted); }
+.prayer-counter-invalid { color: #fda4af; }
+.prayer-link { color: var(--text); text-decoration: underline; text-decoration-color: rgba(255,255,255,.35); }
+.prayer-link:hover { text-decoration-color: #fff; }
+.prayer-error {
+  border-radius: .85rem;
+  border: 1px solid rgba(248,113,113,.35);
+  background: rgba(239,68,68,.12);
+  color: #fecaca;
+  padding: .72rem .8rem;
+  font-size: .9rem;
+}
+.prayer-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .7rem; }
+.prayer-note { color: var(--muted); font-size: .8rem; }
+.prayer-success { display: grid; gap: .8rem; }
+.prayer-success-title { font-size: 1.2rem; font-weight: 700; }
+.prayer-success-text { margin: 0; color: var(--muted); line-height: 1.6; }
+.prayer-success-actions { display: flex; flex-wrap: wrap; gap: .65rem; }
+
 .ui-btn {
   display: inline-flex; align-items: center; gap: .4rem; border: 0; cursor: pointer;
   border-radius: .85rem; padding: .72rem 1.05rem; font-size: .96rem; font-weight: 600;
@@ -107,4 +176,7 @@ textarea { min-height: 170px; }
   .topic-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .how-works-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .site-footer-inner { flex-direction: row; justify-content: space-between; align-items: center; }
+  .request-page { gap: 1.3rem; }
+  .request-form-card, .request-privacy-card { padding: 1.45rem; }
+  .prayer-grid-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
