@@ -1,9 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/Ui";
 
 type Status = "idle" | "sending" | "sent" | "error";
+
+type Option<T extends string> = {
+  v: T;
+  label: string;
+};
 
 const categories = [
   { v: "health", label: "Здоровье" },
@@ -14,6 +19,94 @@ const categories = [
   { v: "addiction", label: "Зависимости" },
   { v: "other", label: "Другое" },
 ] as const;
+
+const urgencyOptions = [
+  { v: "usual", label: "Обычно" },
+  { v: "urgent", label: "Срочно" },
+] as const;
+
+const cityOptions = [
+  { v: "izhevsk", label: "г. Ижевск" },
+  { v: "other", label: "Другой город" },
+] as const;
+
+const meetingOptions = [
+  { v: "home_visit", label: "Нужно прийти ко мне" },
+  { v: "self_visit", label: "Я приду на молитву сам(а)" },
+  { v: "online", label: "Онлайн без личного контакта" },
+] as const;
+
+function FancySelect<T extends string>({
+  value,
+  onChange,
+  options,
+  ariaLabel,
+}: {
+  value: T;
+  onChange: (next: T) => void;
+  options: readonly Option<T>[];
+  ariaLabel: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+
+  const selected = options.find((item) => item.v === value) ?? options[0];
+
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      if (!wrapRef.current?.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    function onEsc(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", onDocClick);
+    document.addEventListener("keydown", onEsc);
+
+    return () => {
+      document.removeEventListener("mousedown", onDocClick);
+      document.removeEventListener("keydown", onEsc);
+    };
+  }, []);
+
+  return (
+    <div ref={wrapRef} className={`prayer-select ${open ? "prayer-select-open" : ""}`}>
+      <button
+        type="button"
+        className="prayer-select-trigger"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
+        aria-label={ariaLabel}
+      >
+        <span className="prayer-select-value">{selected.label}</span>
+        <span className="prayer-select-chevron" aria-hidden="true">⌄</span>
+      </button>
+
+      <div className="prayer-select-panel" role="listbox" aria-label={ariaLabel}>
+        {options.map((option) => (
+          <button
+            key={option.v}
+            type="button"
+            role="option"
+            aria-selected={option.v === value}
+            className={`prayer-select-option ${option.v === value ? "prayer-select-option-active" : ""}`}
+            onClick={() => {
+              onChange(option.v);
+              setOpen(false);
+            }}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function PrayerForm() {
   const [status, setStatus] = useState<Status>("idle");
@@ -26,13 +119,12 @@ export default function PrayerForm() {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
-  const [city, setCity] = useState<string>("izhevsk");
+  const [city, setCity] = useState<"izhevsk" | "other">("izhevsk");
   const [meetingFormat, setMeetingFormat] = useState<"home_visit" | "self_visit" | "online">("home_visit");
   const [address, setAddress] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const [consent, setConsent] = useState<boolean>(false);
 
-  // honeypot
   const [hp, setHp] = useState<string>("");
 
   const count = message.length;
@@ -73,7 +165,7 @@ export default function PrayerForm() {
           anonymous,
           consent,
           hp,
-          captchaToken: "", // сюда подставляется токен Turnstile/hCaptcha при подключении виджета
+          captchaToken: "",
         }),
       });
 
@@ -108,31 +200,22 @@ export default function PrayerForm() {
       <div className="prayer-grid-two">
         <label className="prayer-field">
           <span className="prayer-label">Тема / категория</span>
-          <select
-            className="prayer-input"
+          <FancySelect
             value={category}
-            onChange={(e) => setCategory(e.target.value as any)}
-            aria-label="Категория"
-          >
-            {categories.map((c) => (
-              <option key={c.v} value={c.v}>
-                {c.label}
-              </option>
-            ))}
-          </select>
+            onChange={setCategory}
+            options={categories}
+            ariaLabel="Категория"
+          />
         </label>
 
         <label className="prayer-field">
           <span className="prayer-label">Срочность</span>
-          <select
-            className="prayer-input"
+          <FancySelect
             value={urgency}
-            onChange={(e) => setUrgency(e.target.value as any)}
-            aria-label="Срочность"
-          >
-            <option value="usual">Обычно</option>
-            <option value="urgent">Срочно</option>
-          </select>
+            onChange={setUrgency}
+            options={urgencyOptions}
+            ariaLabel="Срочность"
+          />
         </label>
       </div>
 
@@ -214,15 +297,12 @@ export default function PrayerForm() {
 
         <label className="prayer-field">
           <span className="prayer-label">Место проживания</span>
-          <select
-            className="prayer-input"
+          <FancySelect
             value={city}
-            onChange={(e) => setCity(e.target.value)}
-            aria-label="Место проживания"
-          >
-            <option value="izhevsk">г. Ижевск</option>
-            <option value="other">Другой город</option>
-          </select>
+            onChange={setCity}
+            options={cityOptions}
+            ariaLabel="Место проживания"
+          />
         </label>
       </div>
 
@@ -230,16 +310,12 @@ export default function PrayerForm() {
         <div className="prayer-grid-two">
           <label className="prayer-field">
             <span className="prayer-label">Как вам удобно</span>
-            <select
-              className="prayer-input"
+            <FancySelect
               value={meetingFormat}
-              onChange={(e) => setMeetingFormat(e.target.value as "home_visit" | "self_visit" | "online")}
-              aria-label="Вариант молитвы"
-            >
-              <option value="home_visit">Нужно прийти ко мне</option>
-              <option value="self_visit">Я приду на молитву сам(а)</option>
-              <option value="online">Онлайн без личного контакта</option>
-            </select>
+              onChange={setMeetingFormat}
+              options={meetingOptions}
+              ariaLabel="Вариант молитвы"
+            />
           </label>
 
           {meetingFormat === "home_visit" ? (
@@ -276,7 +352,6 @@ export default function PrayerForm() {
         />
       </label>
 
-      {/* honeypot: скрыто */}
       <div className="hidden">
         <label>
           Не заполняйте это поле:
