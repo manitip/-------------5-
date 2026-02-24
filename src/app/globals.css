@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  --bg: #0B0F14;
+  --card: #111827;
+  --text: #E6EEF7;
+  --muted: #A7B3C2;
+  --g: #19C37D;
+  --c: #22D3EE;
+}
+
+html, body { height: 100%; }
+body{
+  background: var(--bg);
+  color: var(--text);
+}
+
+*{ scroll-behavior: smooth; }
+
+:focus-visible{
+  outline: 2px solid color-mix(in oklab, var(--c) 70%, white 30%);
+  outline-offset: 2px;
+}

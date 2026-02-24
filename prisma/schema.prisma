@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model PrayerRequest {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  category   String
+  urgency    String   @default("usual") // usual | urgent
+  forWhom    String   @default("self")  // self | other
+
+  message    String
+  name       String?
+  email      String?
+
+  status     String   @default("new")   // new | praying | done
+  ipHash     String?                    // не храним IP напрямую
+
+  deletedAt  DateTime?
+}
