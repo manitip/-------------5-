@@ -5,25 +5,33 @@ export const metadata = { title: "Контакты" };
 
 export default function Contacts() {
   return (
-    <div className="space-y-6">
+    <div className="contacts-page">
       <FadeIn>
-        <h1 className="text-2xl font-semibold md:text-3xl">Контакты</h1>
+        <section className="contacts-hero">
+          <p className="section-kicker">Связаться с нами</p>
+          <h1 className="contacts-title">Контакты</h1>
+          <p className="contacts-subtitle">
+            Если вам удобнее написать напрямую, используйте email ниже. Мы стараемся отвечать
+            спокойно и по делу.
+          </p>
+        </section>
       </FadeIn>
 
       <FadeIn>
-        <Card className="p-5 md:p-7">
-          <div className="space-y-3 text-sm text-[#A7B3C2]">
-            <div>
-              <span className="text-[#E6EEF7] font-medium">Email:</span> team@example.com
-            </div>
-            <div>
-              <span className="text-[#E6EEF7] font-medium">Обычно отвечаем:</span> в течение 1–2 дней
-            </div>
-            <div className="pt-2">
-              <a className="text-[#E6EEF7] underline decoration-white/30 hover:decoration-white" href="/privacy">
-                Политика конфиденциальности
-              </a>
-            </div>
+        <Card className="contacts-card">
+          <div className="contacts-row">
+            <span className="contacts-label">Email</span>
+            <a className="contacts-link" href="mailto:team@example.com">team@example.com</a>
+          </div>
+
+          <div className="contacts-row">
+            <span className="contacts-label">Обычно отвечаем</span>
+            <span className="contacts-value">в течение 1–2 дней</span>
+          </div>
+
+          <div className="contacts-row contacts-row-last">
+            <span className="contacts-label">Документы</span>
+            <a className="contacts-link" href="/privacy">Политика конфиденциальности</a>
           </div>
         </Card>
       </FadeIn>
