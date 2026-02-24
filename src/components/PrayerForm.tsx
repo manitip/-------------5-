@@ -25,6 +25,10 @@ export default function PrayerForm() {
   const [anonymous, setAnonymous] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [city, setCity] = useState<string>("izhevsk");
+  const [meetingFormat, setMeetingFormat] = useState<"home_visit" | "self_visit" | "online">("home_visit");
+  const [address, setAddress] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const [consent, setConsent] = useState<boolean>(false);
 
@@ -33,13 +37,18 @@ export default function PrayerForm() {
 
   const count = message.length;
   const okLen = count >= 300 && count <= 1500;
+  const phoneOk = phone.trim().length >= 6;
+  const addressNeeded = city === "izhevsk" && meetingFormat === "home_visit";
+  const addressOk = !addressNeeded || address.trim().length >= 10;
 
   const disabled = useMemo(() => {
     if (status === "sending") return true;
     if (!consent) return true;
     if (!okLen) return true;
+    if (!phoneOk) return true;
+    if (!addressOk) return true;
     return false;
-  }, [status, consent, okLen]);
+  }, [status, consent, okLen, phoneOk, addressOk]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -57,6 +66,10 @@ export default function PrayerForm() {
           message,
           name,
           email,
+          phone,
+          city,
+          meetingFormat: city === "izhevsk" ? meetingFormat : null,
+          address: addressNeeded ? address : "",
           anonymous,
           consent,
           hp,
@@ -155,7 +168,7 @@ export default function PrayerForm() {
             onChange={(e) => setAnonymous(e.target.checked)}
             className="prayer-checkbox"
           />
-          <span className="prayer-label">Анонимно (скрыть имя и контакт)</span>
+          <span className="prayer-label">Анонимно (скрыть имя и email)</span>
         </label>
       </div>
 
@@ -175,6 +188,7 @@ export default function PrayerForm() {
           <label className="prayer-field">
             <span className="prayer-label">Email для подтверждения (необязательно)</span>
             <input
+              type="email"
               className="prayer-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -182,6 +196,67 @@ export default function PrayerForm() {
               aria-label="Email"
             />
           </label>
+        </div>
+      )}
+
+      <div className="prayer-grid-two">
+        <label className="prayer-field">
+          <span className="prayer-label">Телефон (обязательно)</span>
+          <input
+            className="prayer-input"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="+7 (___) ___-__-__"
+            aria-label="Телефон"
+            required
+          />
+        </label>
+
+        <label className="prayer-field">
+          <span className="prayer-label">Место проживания</span>
+          <select
+            className="prayer-input"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            aria-label="Место проживания"
+          >
+            <option value="izhevsk">г. Ижевск</option>
+            <option value="other">Другой город</option>
+          </select>
+        </label>
+      </div>
+
+      {city === "izhevsk" && (
+        <div className="prayer-grid-two">
+          <label className="prayer-field">
+            <span className="prayer-label">Как вам удобно</span>
+            <select
+              className="prayer-input"
+              value={meetingFormat}
+              onChange={(e) => setMeetingFormat(e.target.value as "home_visit" | "self_visit" | "online")}
+              aria-label="Вариант молитвы"
+            >
+              <option value="home_visit">Нужно прийти ко мне</option>
+              <option value="self_visit">Я приду на молитву сам(а)</option>
+              <option value="online">Онлайн без личного контакта</option>
+            </select>
+          </label>
+
+          {meetingFormat === "home_visit" ? (
+            <label className="prayer-field">
+              <span className="prayer-label">Полный адрес (обязательно)</span>
+              <input
+                className="prayer-input"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Город, улица, дом, квартира, подъезд"
+                aria-label="Полный адрес"
+                required
+              />
+            </label>
+          ) : (
+            <div />
+          )}
         </div>
       )}
 
