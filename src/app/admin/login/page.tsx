@@ -23,7 +23,7 @@ export default function AdminLogin() {
           </button>
 
           <p className="text-xs text-[#A7B3C2]">
-            Если вход не проходит — проверьте ADMIN_EMAIL и ADMIN_PASSWORD_HASH в .env
+            Если вход не проходит — проверьте ADMIN_EMAIL и ADMIN_PASSWORD/ADMIN_PASSWORD_HASH в .env
           </p>
         </form>
       </Card>

@@ -37,7 +37,17 @@ export async function clearSessionCookie() {
 export async function verifyAdmin(email: string, password: string) {
   const adminEmail = process.env.ADMIN_EMAIL || "";
   const hash = process.env.ADMIN_PASSWORD_HASH || "";
-  if (!adminEmail || !hash) return false;
+  const plainPassword = process.env.ADMIN_PASSWORD || "";
+  if (!adminEmail) return false;
   if (email !== adminEmail) return false;
-  return bcrypt.compare(password, hash);
+
+  if (hash) {
+    return bcrypt.compare(password, hash);
+  }
+
+  if (plainPassword) {
+    return password === plainPassword;
+  }
+
+  return false;
 }
