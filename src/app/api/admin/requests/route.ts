@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { readSession } from "@/lib/auth";
 
-function guard() {
-  const s = readSession();
+async function guard() {
+  const s = await readSession();
   return Boolean(s);
 }
 
 export async function GET(req: NextRequest) {
-  if (!guard()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await guard())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { searchParams } = new URL(req.url);
   const status = searchParams.get("status");
@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  if (!guard()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await guard())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json().catch(() => null);
   const id = body?.id as string;
@@ -67,7 +67,7 @@ export async function PATCH(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  if (!guard()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await guard())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json().catch(() => null);
   const id = body?.id as string;

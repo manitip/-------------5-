@@ -9,7 +9,7 @@ function csvEscape(v: any) {
 }
 
 export async function GET() {
-  if (!readSession()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await readSession())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const rows = await prisma.prayerRequest.findMany({
     where: { deletedAt: null },

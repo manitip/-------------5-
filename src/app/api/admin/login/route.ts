@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   if (!ok) return NextResponse.redirect(new URL("/admin/login", req.url), { status: 303 });
 
   const token = signSession({ email });
-  setSessionCookie(token);
+  await setSessionCookie(token);
 
   return NextResponse.redirect(new URL("/admin", req.url), { status: 303 });
 }
