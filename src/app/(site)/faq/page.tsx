@@ -12,17 +12,26 @@ const faq = [
 
 export default function FAQ() {
   return (
-    <div className="space-y-6">
+    <div className="faq-page">
       <FadeIn>
-        <h1 className="text-2xl font-semibold md:text-3xl">FAQ</h1>
+        <section className="faq-hero">
+          <p className="section-kicker">Полезно знать</p>
+          <h1 className="faq-title">FAQ</h1>
+          <p className="faq-subtitle">
+            Короткие ответы на самые частые вопросы перед отправкой просьбы о молитве.
+          </p>
+        </section>
       </FadeIn>
 
-      <div className="grid gap-4">
-        {faq.map((x) => (
-          <FadeIn key={x.q}>
-            <Card className="p-5">
-              <div className="text-base font-semibold">{x.q}</div>
-              <div className="mt-2 text-sm text-[#A7B3C2]">{x.a}</div>
+      <div className="faq-grid">
+        {faq.map((item, idx) => (
+          <FadeIn key={item.q}>
+            <Card className="faq-card">
+              <div className="faq-card-top">
+                <span className="faq-badge">{String(idx + 1).padStart(2, "0")}</span>
+                <h2 className="faq-card-title">{item.q}</h2>
+              </div>
+              <p className="faq-card-text">{item.a}</p>
             </Card>
           </FadeIn>
         ))}
