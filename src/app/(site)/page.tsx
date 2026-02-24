@@ -12,64 +12,59 @@ const topics = [
 
 export default function HomePage() {
   return (
-    <div className="space-y-10">
+    <div className="home-stack">
       <FadeIn>
-        <section className="grid gap-8 md:grid-cols-12 md:items-center">
-          <div className="md:col-span-7">
-            <h1 className="text-3xl font-semibold leading-tight tracking-tight md:text-5xl">
-              Можно попросить молитву — спокойно, бережно и без лишних вопросов.
-            </h1>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-[#A7B3C2] md:text-lg">
-              Опишите ситуацию так, как можете. Можно анонимно.
-              Если захотите — оставьте email, чтобы получить подтверждение.
+        <section className="hero-grid">
+          <div>
+            <h1 className="hero-title">Можно попросить молитву — спокойно, бережно и без лишних вопросов.</h1>
+            <p className="hero-subtitle">
+              Опишите ситуацию так, как можете. Можно анонимно. Если захотите — оставьте email,
+              чтобы получить подтверждение.
             </p>
 
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="hero-buttons">
               <Button href="/request">Попросить молитву</Button>
               <Button href="/how-it-works" variant="ghost">Как это работает</Button>
               <Button href="/contacts" variant="ghost">Контакты</Button>
             </div>
 
-            <div className="mt-6 grid gap-3 md:grid-cols-3">
-              <Card className="p-4">
-                <div className="text-sm font-semibold">Можно анонимно</div>
-                <div className="mt-1 text-sm text-[#A7B3C2]">без имени и контактов</div>
+            <div className="feature-grid">
+              <Card className="feature-card">
+                <div className="feature-title">Можно анонимно</div>
+                <div className="feature-text">без имени и контактов</div>
               </Card>
-              <Card className="p-4">
-                <div className="text-sm font-semibold">Ничего не публикуем</div>
-                <div className="mt-1 text-sm text-[#A7B3C2]">история остаётся приватной</div>
+              <Card className="feature-card">
+                <div className="feature-title">Ничего не публикуем</div>
+                <div className="feature-text">история остаётся приватной</div>
               </Card>
-              <Card className="p-4">
-                <div className="text-sm font-semibold">Минимум полей</div>
-                <div className="mt-1 text-sm text-[#A7B3C2]">только то, что нужно</div>
+              <Card className="feature-card">
+                <div className="feature-title">Минимум полей</div>
+                <div className="feature-text">только то, что нужно</div>
               </Card>
             </div>
           </div>
 
-          <div className="md:col-span-5">
-            <Card className="p-6">
-              <div className="text-sm font-semibold">Коротко</div>
-              <p className="mt-2 text-sm leading-relaxed text-[#A7B3C2]">
-                Мы принимаем запросы и молимся. Иногда отправляем подтверждение,
-                если вы оставили контакт. Мы не обещаем “чудес по расписанию” —
-                но бережно поддерживаем и остаёмся рядом.
+          <div>
+            <Card className="hero-info-card">
+              <div className="feature-title">Коротко</div>
+              <p className="feature-text">
+                Мы принимаем запросы и молимся. Иногда отправляем подтверждение, если вы оставили контакт.
+                Мы не обещаем “чудес по расписанию” — но бережно поддерживаем и остаёмся рядом.
               </p>
-              <div className="mt-4 rounded-xl bg-white/5 p-4 text-sm text-[#A7B3C2] ring-1 ring-white/10">
-                Если вы в опасности или вам нужна срочная помощь — обратитесь в местные экстренные службы.
-              </div>
+              <div className="hero-warning">Если вы в опасности или вам нужна срочная помощь — обратитесь в местные экстренные службы.</div>
             </Card>
           </div>
         </section>
       </FadeIn>
 
       <FadeIn>
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold md:text-2xl">О чём можно попросить</h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <section>
+          <h2 className="section-title">О чём можно попросить</h2>
+          <div className="topic-grid">
             {topics.map((t) => (
-              <Card key={t.title} className="p-5">
-                <div className="text-base font-semibold">{t.title}</div>
-                <div className="mt-2 text-sm text-[#A7B3C2]">{t.text}</div>
+              <Card key={t.title} className="topic-card">
+                <div className="feature-title">{t.title}</div>
+                <div className="feature-text">{t.text}</div>
               </Card>
             ))}
           </div>

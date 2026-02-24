@@ -11,37 +11,26 @@ const items = [
 
 export default function Nav() {
   return (
-    <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0B0F14]/70 backdrop-blur">
-      <div className="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-3">
-        <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-          <span className="h-2 w-2 rounded-full" style={{ background: "#19C37D" }} />
+    <header className="site-nav">
+      <div className="container site-nav-inner">
+        <Link href="/" className="site-logo">
+          <span className="site-logo-dot" />
           <span>Молитвенная поддержка</span>
         </Link>
 
-        <nav className="hidden gap-5 text-sm text-[#A7B3C2] md:flex">
+        <nav className="site-nav-links">
           {items.map((i) => (
-            <Link key={i.href} href={i.href} className="hover:text-[#E6EEF7]">
+            <Link key={i.href} href={i.href} className="site-nav-link">
               {i.label}
             </Link>
           ))}
         </nav>
 
-        <Link
-          href="/request"
-          className="hidden rounded-xl bg-white/0 px-4 py-2 text-sm font-medium text-[#E6EEF7] ring-1 ring-white/10 hover:bg-white/5 md:inline-flex"
-        >
-          Попросить молитву
-        </Link>
+        <Link href="/request" className="ui-btn ui-btn-ghost site-nav-cta">Попросить молитву</Link>
       </div>
 
-      {/* липкая CTA на мобилке */}
-      <div className="fixed bottom-4 left-0 right-0 z-30 mx-auto w-full max-w-[1200px] px-4 md:hidden">
-        <Link
-          href="/request"
-          className="flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-[#19C37D] to-[#22D3EE] px-5 py-4 text-base font-semibold text-[#0B0F14] shadow-2xl shadow-black/30"
-        >
-          Попросить молитву
-        </Link>
+      <div className="container mobile-cta-wrap">
+        <Link href="/request" className="ui-btn ui-btn-primary mobile-cta">Попросить молитву</Link>
       </div>
     </header>
   );
