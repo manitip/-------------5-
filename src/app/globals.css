@@ -117,10 +117,103 @@ a { color: inherit; text-decoration: none; }
   border-color: rgba(34,211,238,.48);
   background: linear-gradient(180deg, rgba(34,211,238,.2), rgba(34,211,238,.08));
 }
-.prayer-check-row { display: flex; gap: .65rem; align-items: flex-start; }
-.prayer-check-soft { padding: .75rem .85rem; border: 1px solid rgba(255,255,255,.1); border-radius: .85rem; background: rgba(255,255,255,.02); }
-.prayer-checkbox { width: 1rem; height: 1rem; margin-top: .18rem; accent-color: #22D3EE; }
-.prayer-checkbox-consent { accent-color: #19C37D; }
+.prayer-select { position: relative; }
+.prayer-select-trigger {
+  width: 100%;
+  border-radius: .85rem;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(6,13,23,.52);
+  color: var(--text);
+  min-height: 2.9rem;
+  padding: .75rem .9rem;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  cursor: pointer;
+  transition: border-color .22s ease, box-shadow .22s ease, background .22s ease;
+}
+.prayer-select-trigger:hover { background: rgba(12,22,36,.8); border-color: rgba(255,255,255,.2); }
+.prayer-select-open .prayer-select-trigger {
+  border-color: rgba(34,211,238,.7);
+  box-shadow: 0 0 0 3px rgba(34,211,238,.16);
+  background: rgba(9,17,29,.9);
+}
+.prayer-select-value { line-height: 1.3; }
+.prayer-select-chevron { font-size: .95rem; opacity: .72; transform-origin: center; transition: transform .22s ease, opacity .22s ease; }
+.prayer-select-open .prayer-select-chevron { transform: rotate(180deg); opacity: 1; }
+.prayer-select-panel {
+  position: absolute;
+  inset: calc(100% + .45rem) 0 auto;
+  z-index: 20;
+  border-radius: .85rem;
+  border: 1px solid rgba(255,255,255,.12);
+  background: linear-gradient(180deg, rgba(14,24,39,.98), rgba(9,17,29,.98));
+  box-shadow: 0 18px 35px rgba(0,0,0,.38);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-8px) scale(.98);
+  pointer-events: none;
+  transition: opacity .22s ease, transform .22s ease;
+}
+.prayer-select-open .prayer-select-panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.prayer-select-option {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid rgba(255,255,255,.06);
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  padding: .65rem .9rem;
+  cursor: pointer;
+  transition: background .18s ease, color .18s ease;
+}
+.prayer-select-option:first-child { border-top: 0; }
+.prayer-select-option:hover { background: rgba(34,211,238,.18); }
+.prayer-select-option-active {
+  background: linear-gradient(90deg, rgba(25,195,125,.24), rgba(34,211,238,.24));
+  color: #eafff8;
+}
+.prayer-check-row { display: flex; gap: .65rem; align-items: center; }
+.prayer-check-soft { padding: .72rem .85rem; border: 1px solid rgba(255,255,255,.1); border-radius: .85rem; background: rgba(255,255,255,.02); }
+.prayer-checkbox {
+  width: 1.08rem;
+  height: 1.08rem;
+  margin: 0;
+  appearance: none;
+  border-radius: .3rem;
+  border: 1px solid rgba(255,255,255,.35);
+  background: rgba(255,255,255,.03);
+  display: inline-grid;
+  place-content: center;
+  transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+.prayer-checkbox::after {
+  content: "";
+  width: .58rem;
+  height: .32rem;
+  border-left: 2px solid #041b1f;
+  border-bottom: 2px solid #041b1f;
+  transform: rotate(-45deg) scale(0);
+  transition: transform .16s ease;
+}
+.prayer-checkbox:checked {
+  border-color: rgba(34,211,238,.9);
+  background: linear-gradient(180deg, #22D3EE, #0EA5E9);
+  box-shadow: 0 0 0 3px rgba(34,211,238,.18);
+}
+.prayer-checkbox:checked::after { transform: rotate(-45deg) scale(1); }
+.prayer-checkbox-consent:checked {
+  border-color: rgba(25,195,125,.9);
+  background: linear-gradient(180deg, #34D399, #19C37D);
+  box-shadow: 0 0 0 3px rgba(25,195,125,.18);
+}
+.prayer-check-row .prayer-label { line-height: 1.25; margin: 0; }
 .prayer-message-label-row { display: flex; justify-content: space-between; gap: .75rem; align-items: center; }
 .prayer-counter { font-size: .78rem; color: var(--muted); }
 .prayer-counter-invalid { color: #fda4af; }
