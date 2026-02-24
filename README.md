@@ -20,4 +20,4 @@ npm run dev
 
 ## Админка
 - /admin
-- логин/пароль: ADMIN_EMAIL и ADMIN_PASSWORD_HASH в `.env`
+- логин/пароль: ADMIN_EMAIL и ADMIN_PASSWORD (или ADMIN_PASSWORD_HASH) в `.env`
