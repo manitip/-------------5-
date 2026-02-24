@@ -44,11 +44,16 @@ export default function AdminClient() {
       if (q) url.searchParams.set("q", q);
       if (status !== "all") url.searchParams.set("status", status);
       const res = await fetch(url.toString());
-      const data = await res.json();
+      const type = res.headers.get("content-type") || "";
+      const data = type.includes("application/json") ? await res.json() : null;
       if (!res.ok) throw new Error(data?.error || "Ошибка загрузки");
       setItems(data.items || []);
     } catch (e: any) {
-      setErr(e?.message || "Ошибка");
+      setErr(
+        e?.message?.includes("Unexpected token")
+          ? "Не удалось загрузить данные. Проверьте доступ администратора."
+          : e?.message || "Ошибка",
+      );
     } finally {
       setLoading(false);
     }
@@ -95,7 +100,7 @@ export default function AdminClient() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="admin-page space-y-6">
       <Card className="relative overflow-hidden p-5 sm:p-6">
         <div className="pointer-events-none absolute -right-20 -top-20 h-44 w-44 rounded-full bg-cyan-400/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 -left-20 h-44 w-44 rounded-full bg-emerald-400/10 blur-3xl" />
@@ -117,7 +122,7 @@ export default function AdminClient() {
               Очистка по сроку
             </Button>
             <form action="/api/admin/logout" method="post">
-              <button className="rounded-xl bg-white/0 px-4 py-2 text-sm ring-1 ring-white/10 transition hover:bg-white/5">
+              <button className="ui-btn ui-btn-danger">
                 Выйти
               </button>
             </form>
@@ -125,18 +130,18 @@ export default function AdminClient() {
         </div>
       </Card>
 
-      <Card className="p-5">
-        <div className="grid gap-3 md:grid-cols-3">
+      <Card className="admin-filter-card p-5">
+        <div className="grid gap-3 md:grid-cols-[1.7fr_1fr_auto] md:items-end">
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Поиск по тексту/имени/email/телефону"
-            className="rounded-xl border border-white/10 bg-[#0E1724] p-3 text-sm"
+            className="admin-input"
           />
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value as any)}
-            className="rounded-xl border border-white/10 bg-[#0E1724] p-3 text-sm"
+            className="admin-input"
           >
             <option value="all">Все статусы</option>
             <option value="new">Новый</option>
@@ -165,31 +170,31 @@ export default function AdminClient() {
                   <span className="font-medium text-[#E6EEF7]">{new Date(r.createdAt).toLocaleString("ru-RU")}</span>
                   {" · "}Категория: {catMap[r.category] || r.category}
                   {" · "}Срочность: {r.urgency === "urgent" ? "Срочно" : "Обычно"}
-                  {" · "}Статус: <span className="rounded-full bg-cyan-400/10 px-2 py-0.5 text-cyan-100">{r.status}</span>
+                  {" · "}Статус: <span className="admin-status-chip">{r.status}</span>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => updateStatus(r.id, "new")}
-                    className="rounded-xl px-3 py-2 text-xs ring-1 ring-white/10 transition hover:bg-white/5"
+                    className="admin-mini-btn"
                   >
                     Новый
                   </button>
                   <button
                     onClick={() => updateStatus(r.id, "praying")}
-                    className="rounded-xl px-3 py-2 text-xs ring-1 ring-white/10 transition hover:bg-white/5"
+                    className="admin-mini-btn"
                   >
                     В молитве
                   </button>
                   <button
                     onClick={() => updateStatus(r.id, "done")}
-                    className="rounded-xl px-3 py-2 text-xs ring-1 ring-white/10 transition hover:bg-white/5"
+                    className="admin-mini-btn"
                   >
                     Завершено
                   </button>
                   <button
                     onClick={() => remove(r.id)}
-                    className="rounded-xl px-3 py-2 text-xs text-red-200 ring-1 ring-red-400/20 transition hover:bg-red-500/10"
+                    className="admin-mini-btn admin-mini-btn-danger"
                   >
                     Удалить
                   </button>
