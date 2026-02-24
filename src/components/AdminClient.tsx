@@ -12,6 +12,10 @@ type Req = {
   forWhom: string;
   name?: string | null;
   email?: string | null;
+  phone: string;
+  city: string;
+  meetingFormat?: string | null;
+  address?: string | null;
   message: string;
 };
 
@@ -120,7 +124,7 @@ export default function AdminClient() {
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Поиск по тексту/имени/email"
+            placeholder="Поиск по тексту/имени/email/телефону"
             className="rounded-xl bg-white/0 p-3 text-sm ring-1 ring-white/10"
           />
           <select
@@ -199,7 +203,25 @@ export default function AdminClient() {
                     Имя: <span className="text-[#E6EEF7]">{r.name}</span> ·{" "}
                   </>
                 ) : null}
-                {r.forWhom === "other" ? "За другого" : "За себя"}
+                Телефон: <span className="text-[#E6EEF7]">{r.phone}</span> ·{" "}
+                Город: <span className="text-[#E6EEF7]">{r.city === "izhevsk" ? "г. Ижевск" : "Другой"}</span>
+                {r.city === "izhevsk" && r.meetingFormat ? (
+                  <>
+                    {" "}· Формат: <span className="text-[#E6EEF7]">
+                      {r.meetingFormat === "home_visit"
+                        ? "Нужно прийти"
+                        : r.meetingFormat === "self_visit"
+                        ? "Самостоятельно"
+                        : "Онлайн"}
+                    </span>
+                  </>
+                ) : null}
+                {r.address ? (
+                  <>
+                    {" "}· Адрес: <span className="text-[#E6EEF7]">{r.address}</span>
+                  </>
+                ) : null}
+                {" "}· {r.forWhom === "other" ? "За другого" : "За себя"}
               </div>
             </Card>
           ))}

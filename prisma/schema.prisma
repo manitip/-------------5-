@@ -19,6 +19,10 @@ model PrayerRequest {
   message    String
   name       String?
   email      String?
+  phone      String
+  city       String   @default("izhevsk") // izhevsk | other
+  meetingFormat String? // home_visit | self_visit | online
+  address    String?
 
   status     String   @default("new")   // new | praying | done
   ipHash     String?                    // не храним IP напрямую

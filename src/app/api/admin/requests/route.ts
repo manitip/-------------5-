@@ -22,6 +22,8 @@ export async function GET(req: NextRequest) {
       { message: { contains: q } },
       { name: { contains: q } },
       { email: { contains: q } },
+      { phone: { contains: q } },
+      { address: { contains: q } },
     ];
   }
 
@@ -38,6 +40,10 @@ export async function GET(req: NextRequest) {
       forWhom: true,
       name: true,
       email: true,
+      phone: true,
+      city: true,
+      meetingFormat: true,
+      address: true,
       message: true,
     },
   });

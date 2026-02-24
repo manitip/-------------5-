@@ -79,6 +79,9 @@ export async function POST(req: NextRequest) {
   // анонимность: принудительно чистим контактные поля
   const name = data.anonymous ? null : (data.name?.trim() || null);
   const email = data.anonymous ? null : (data.email?.trim() || null);
+  const city = data.city;
+  const meetingFormat = city === "izhevsk" ? data.meetingFormat : null;
+  const address = city === "izhevsk" && meetingFormat === "home_visit" ? (data.address?.trim() || null) : null;
 
   const created = await prisma.prayerRequest.create({
     data: {
@@ -88,6 +91,10 @@ export async function POST(req: NextRequest) {
       message: data.message.trim(),
       name,
       email,
+      phone: data.phone.trim(),
+      city,
+      meetingFormat,
+      address,
       ipHash: sha256(ip),
     },
     select: { id: true, createdAt: true, category: true, urgency: true, email: true },
