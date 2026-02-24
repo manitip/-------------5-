@@ -44,8 +44,16 @@ export async function verifyAdmin(email: string, password: string) {
   if (!adminEmail) return false;
   if (normalizedEmail !== normalizedAdminEmail) return false;
 
-  if (hash) {
+  const looksLikeBcryptHash = /^\$2[aby]\$\d{2}\$/.test(hash);
+
+  if (hash && looksLikeBcryptHash) {
     return bcrypt.compare(password, hash);
+  }
+
+  // Dev-friendly fallback: if ADMIN_PASSWORD_HASH accidentally contains plain text,
+  // allow it as a regular password to avoid locking out local admin.
+  if (hash) {
+    return password === hash;
   }
 
   if (plainPassword) {
