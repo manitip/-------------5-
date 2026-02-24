@@ -38,8 +38,11 @@ export async function verifyAdmin(email: string, password: string) {
   const adminEmail = process.env.ADMIN_EMAIL || "";
   const hash = process.env.ADMIN_PASSWORD_HASH || "";
   const plainPassword = process.env.ADMIN_PASSWORD || "";
+  const normalizedEmail = email.trim().toLowerCase();
+  const normalizedAdminEmail = adminEmail.trim().toLowerCase();
+
   if (!adminEmail) return false;
-  if (email !== adminEmail) return false;
+  if (normalizedEmail !== normalizedAdminEmail) return false;
 
   if (hash) {
     return bcrypt.compare(password, hash);

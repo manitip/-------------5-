@@ -7,7 +7,12 @@ export async function POST(req: Request) {
   const password = String(form.get("password") || "");
 
   const ok = await verifyAdmin(email, password);
-  if (!ok) return NextResponse.redirect(new URL("/admin/login", req.url), { status: 303 });
+  if (!ok) {
+    const params = new URLSearchParams({ error: "invalid_credentials" });
+    if (email) params.set("email", email.trim());
+
+    return NextResponse.redirect(new URL(`/admin/login?${params.toString()}`, req.url), { status: 303 });
+  }
 
   const token = signSession({ email });
   await setSessionCookie(token);
