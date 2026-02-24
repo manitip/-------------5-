@@ -9,9 +9,9 @@ export function signSession(payload: { email: string }) {
   return jwt.sign(payload, secret, { expiresIn: "7d" });
 }
 
-export function readSession() {
+export async function readSession() {
   const secret = process.env.JWT_SECRET!;
-  const token = cookies().get(COOKIE_NAME)?.value;
+  const token = (await cookies()).get(COOKIE_NAME)?.value;
   if (!token) return null;
   try {
     return jwt.verify(token, secret) as { email: string; iat: number; exp: number };
@@ -20,8 +20,8 @@ export function readSession() {
   }
 }
 
-export function setSessionCookie(token: string) {
-  cookies().set(COOKIE_NAME, token, {
+export async function setSessionCookie(token: string) {
+  (await cookies()).set(COOKIE_NAME, token, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
@@ -30,8 +30,8 @@ export function setSessionCookie(token: string) {
   });
 }
 
-export function clearSessionCookie() {
-  cookies().set(COOKIE_NAME, "", { path: "/", maxAge: 0 });
+export async function clearSessionCookie() {
+  (await cookies()).set(COOKIE_NAME, "", { path: "/", maxAge: 0 });
 }
 
 export async function verifyAdmin(email: string, password: string) {

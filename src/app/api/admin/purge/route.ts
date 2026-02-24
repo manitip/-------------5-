@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import { readSession } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
-  if (!readSession()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await readSession())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json().catch(() => null);
   const days = Number(body?.days || process.env.RETENTION_DAYS || 90);

@@ -4,8 +4,8 @@ import AdminClient from "@/components/AdminClient";
 
 export const metadata = { title: "Админка" };
 
-export default function AdminPage() {
-  const sess = readSession();
+export default async function AdminPage() {
+  const sess = await readSession();
   if (!sess) redirect("/admin/login");
   return <AdminClient />;
 }
