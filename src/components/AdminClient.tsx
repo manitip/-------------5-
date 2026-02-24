@@ -96,28 +96,34 @@ export default function AdminClient() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold md:text-3xl">Админка</h1>
-          <div className="mt-1 text-sm text-[#A7B3C2]">
-            Новые: {counters.new} · В молитве: {counters.praying} · Завершено: {counters.done}
+      <Card className="relative overflow-hidden p-5 sm:p-6">
+        <div className="pointer-events-none absolute -right-20 -top-20 h-44 w-44 rounded-full bg-cyan-400/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -left-20 h-44 w-44 rounded-full bg-emerald-400/10 blur-3xl" />
+
+        <div className="relative flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="text-xs uppercase tracking-[0.2em] text-cyan-200/80">Панель управления</p>
+            <h1 className="mt-1 text-2xl font-semibold md:text-3xl">Админка</h1>
+            <div className="mt-2 text-sm text-[#A7B3C2]">
+              Новые: {counters.new} · В молитве: {counters.praying} · Завершено: {counters.done}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <Button href="/api/admin/export" variant="ghost">
+              Экспорт CSV
+            </Button>
+            <Button onClick={purge} variant="ghost">
+              Очистка по сроку
+            </Button>
+            <form action="/api/admin/logout" method="post">
+              <button className="rounded-xl bg-white/0 px-4 py-2 text-sm ring-1 ring-white/10 transition hover:bg-white/5">
+                Выйти
+              </button>
+            </form>
           </div>
         </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Button href="/api/admin/export" variant="ghost">
-            Экспорт CSV
-          </Button>
-          <Button onClick={purge} variant="ghost">
-            Очистка по сроку
-          </Button>
-          <form action="/api/admin/logout" method="post">
-            <button className="rounded-xl bg-white/0 px-4 py-2 text-sm ring-1 ring-white/10 hover:bg-white/5">
-              Выйти
-            </button>
-          </form>
-        </div>
-      </div>
+      </Card>
 
       <Card className="p-5">
         <div className="grid gap-3 md:grid-cols-3">
@@ -125,12 +131,12 @@ export default function AdminClient() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Поиск по тексту/имени/email/телефону"
-            className="rounded-xl bg-white/0 p-3 text-sm ring-1 ring-white/10"
+            className="rounded-xl border border-white/10 bg-[#0E1724] p-3 text-sm"
           />
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value as any)}
-            className="rounded-xl bg-white/0 p-3 text-sm ring-1 ring-white/10"
+            className="rounded-xl border border-white/10 bg-[#0E1724] p-3 text-sm"
           >
             <option value="all">Все статусы</option>
             <option value="new">Новый</option>
@@ -147,50 +153,52 @@ export default function AdminClient() {
 
         <div className="mt-5 grid gap-4">
           {!loading && items.length === 0 && (
-            <div className="text-sm text-[#A7B3C2]">Пока нет запросов по выбранным фильтрам.</div>
+            <div className="rounded-xl border border-white/10 bg-white/[.02] p-4 text-sm text-[#A7B3C2]">
+              Пока нет запросов по выбранным фильтрам.
+            </div>
           )}
 
           {items.map((r) => (
-            <Card key={r.id} className="p-5">
+            <Card key={r.id} className="border border-white/10 bg-gradient-to-b from-[#152033] to-[#0F1728] p-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="text-sm text-[#A7B3C2]">
-                  <span className="text-[#E6EEF7] font-medium">
-                    {new Date(r.createdAt).toLocaleString("ru-RU")}
-                  </span>
+                  <span className="font-medium text-[#E6EEF7]">{new Date(r.createdAt).toLocaleString("ru-RU")}</span>
                   {" · "}Категория: {catMap[r.category] || r.category}
                   {" · "}Срочность: {r.urgency === "urgent" ? "Срочно" : "Обычно"}
-                  {" · "}Статус: <span className="text-[#E6EEF7]">{r.status}</span>
+                  {" · "}Статус: <span className="rounded-full bg-cyan-400/10 px-2 py-0.5 text-cyan-100">{r.status}</span>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => updateStatus(r.id, "new")}
-                    className="rounded-xl px-3 py-2 text-xs ring-1 ring-white/10 hover:bg-white/5"
+                    className="rounded-xl px-3 py-2 text-xs ring-1 ring-white/10 transition hover:bg-white/5"
                   >
                     Новый
                   </button>
                   <button
                     onClick={() => updateStatus(r.id, "praying")}
-                    className="rounded-xl px-3 py-2 text-xs ring-1 ring-white/10 hover:bg-white/5"
+                    className="rounded-xl px-3 py-2 text-xs ring-1 ring-white/10 transition hover:bg-white/5"
                   >
                     В молитве
                   </button>
                   <button
                     onClick={() => updateStatus(r.id, "done")}
-                    className="rounded-xl px-3 py-2 text-xs ring-1 ring-white/10 hover:bg-white/5"
+                    className="rounded-xl px-3 py-2 text-xs ring-1 ring-white/10 transition hover:bg-white/5"
                   >
                     Завершено
                   </button>
                   <button
                     onClick={() => remove(r.id)}
-                    className="rounded-xl px-3 py-2 text-xs ring-1 ring-red-400/20 text-red-200 hover:bg-red-500/10"
+                    className="rounded-xl px-3 py-2 text-xs text-red-200 ring-1 ring-red-400/20 transition hover:bg-red-500/10"
                   >
                     Удалить
                   </button>
                 </div>
               </div>
 
-              <div className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-[#E6EEF7]">{r.message}</div>
+              <div className="mt-3 whitespace-pre-wrap rounded-xl border border-white/5 bg-black/10 p-3 text-sm leading-relaxed text-[#E6EEF7]">
+                {r.message}
+              </div>
 
               <div className="mt-3 text-xs text-[#A7B3C2]">
                 {r.email ? (
@@ -203,16 +211,17 @@ export default function AdminClient() {
                     Имя: <span className="text-[#E6EEF7]">{r.name}</span> ·{" "}
                   </>
                 ) : null}
-                Телефон: <span className="text-[#E6EEF7]">{r.phone}</span> ·{" "}
-                Город: <span className="text-[#E6EEF7]">{r.city === "izhevsk" ? "г. Ижевск" : "Другой"}</span>
+                Телефон: <span className="text-[#E6EEF7]">{r.phone}</span> · Город:{" "}
+                <span className="text-[#E6EEF7]">{r.city === "izhevsk" ? "г. Ижевск" : "Другой"}</span>
                 {r.city === "izhevsk" && r.meetingFormat ? (
                   <>
-                    {" "}· Формат: <span className="text-[#E6EEF7]">
+                    {" "}· Формат:{" "}
+                    <span className="text-[#E6EEF7]">
                       {r.meetingFormat === "home_visit"
                         ? "Нужно прийти"
                         : r.meetingFormat === "self_visit"
-                        ? "Самостоятельно"
-                        : "Онлайн"}
+                          ? "Самостоятельно"
+                          : "Онлайн"}
                     </span>
                   </>
                 ) : null}
