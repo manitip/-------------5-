@@ -1,22 +1,21 @@
 import FadeIn from "@/components/FadeIn";
 import { Card } from "@/components/Ui";
+import { siteText } from "@/content/siteText";
 
-export const metadata = { title: "Как это работает" };
+const howItWorksText = siteText.pages.howItWorks;
+
+export const metadata = { title: howItWorksText.title };
 
 export default function HowItWorks() {
   return (
     <div className="how-works-page">
       <FadeIn>
-        <h1 className="how-works-title">Как это работает</h1>
+        <h1 className="how-works-title">{howItWorksText.title}</h1>
       </FadeIn>
 
       <FadeIn>
         <div className="how-works-grid">
-          {[
-            { n: "1", t: "Вы отправляете запрос", d: "Можно анонимно, минимум полей." },
-            { n: "2", t: "Команда молится", d: "Мы бережно относимся к вашей истории." },
-            { n: "3", t: "Подтверждение — по желанию", d: "Если оставили email, можем подтвердить получение." },
-          ].map((s) => (
+          {howItWorksText.steps.map((s) => (
             <Card key={s.n} className="how-works-card">
               <div className="how-works-step">Шаг {s.n}</div>
               <div className="how-works-card-title">{s.t}</div>
@@ -28,11 +27,8 @@ export default function HowItWorks() {
 
       <FadeIn>
         <Card className="how-works-note">
-          <div className="how-works-note-title">О сроках</div>
-          <p className="how-works-note-text">
-            Мы стараемся реагировать быстро, но не даём обещаний “точного результата”.
-            Если вы оставили контакт — подтверждение может прийти автоматически.
-          </p>
+          <div className="how-works-note-title">{howItWorksText.noteTitle}</div>
+          <p className="how-works-note-text">{howItWorksText.noteText}</p>
         </Card>
       </FadeIn>
     </div>
