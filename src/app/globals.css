@@ -31,7 +31,7 @@ a { color: inherit; text-decoration: none; }
 .site-nav { position: sticky; top: 0; z-index: 30; backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,.08); background: rgba(11,15,20,.65); }
 .site-nav-inner { display: flex; align-items: center; justify-content: space-between; min-height: 4rem; gap: 1rem; }
 .site-logo { display: flex; align-items: center; gap: .55rem; font-weight: 700; }
-.site-logo-dot { width: .55rem; height: .55rem; border-radius: 999px; background: var(--g); box-shadow: 0 0 0 4px rgba(25,195,125,.2); }
+.site-logo-icon { width: 1.05rem; height: 1.05rem; display: block; filter: drop-shadow(0 0 6px rgba(34,211,238,.45)); }
 .site-nav-links { display: none; gap: 1.1rem; color: var(--muted); font-size: .95rem; }
 .site-nav-link:hover, .site-footer a:hover { color: #fff; }
 .site-nav-cta { display: none; }

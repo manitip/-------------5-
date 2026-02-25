@@ -5,6 +5,11 @@ import GlowBg from "@/components/GlowBg";
 export const metadata: Metadata = {
   title: "Молитвенная поддержка",
   description: "Тёплый и простой способ попросить молитву — можно анонимно.",
+  icons: {
+    icon: "/molicon.svg",
+    shortcut: "/molicon.svg",
+    apple: "/molicon.svg",
+  },
   openGraph: {
     title: "Молитвенная поддержка",
     description: "Можно написать анонимно. Мы бережно относимся к вашей истории.",

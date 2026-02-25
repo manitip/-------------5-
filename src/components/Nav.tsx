@@ -14,7 +14,7 @@ export default function Nav() {
     <header className="site-nav">
       <div className="container site-nav-inner">
         <Link href="/" className="site-logo">
-          <span className="site-logo-dot" />
+          <img src="/molicon.svg" alt="Иконка Молитвенной поддержки" className="site-logo-icon" />
           <span>Молитвенная поддержка</span>
         </Link>
 
