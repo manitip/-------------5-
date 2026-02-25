@@ -21,7 +21,7 @@ export default function Nav() {
         <Link href="/request" className="ui-btn ui-btn-ghost site-nav-cta">{siteText.nav.requestCta}</Link>
       </div>
 
-      <div className="container mobile-cta-wrap">
+      <div className="mobile-cta-wrap">
         <Link href="/request" className="ui-btn ui-btn-primary mobile-cta">{siteText.nav.requestCta}</Link>
       </div>
     </header>

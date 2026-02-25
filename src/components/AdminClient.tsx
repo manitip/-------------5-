@@ -164,16 +164,16 @@ export default function AdminClient() {
           )}
 
           {items.map((r) => (
-            <Card key={r.id} className="border border-white/10 bg-gradient-to-b from-[#152033] to-[#0F1728] p-5">
-              <div className="flex flex-wrap items-center justify-between gap-3">
+            <Card key={r.id} className="border border-white/10 bg-gradient-to-b from-[#152033] to-[#0F1728] p-4 sm:p-5">
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                 <div className="text-sm text-[#A7B3C2]">
-                  <span className="font-medium text-[#E6EEF7]">{new Date(r.createdAt).toLocaleString("ru-RU")}</span>
-                  {" · "}Категория: {catMap[r.category] || r.category}
-                  {" · "}Срочность: {r.urgency === "urgent" ? "Срочно" : "Обычно"}
-                  {" · "}Статус: <span className="admin-status-chip">{r.status}</span>
+                  <span className="block font-medium text-[#E6EEF7] sm:inline">{new Date(r.createdAt).toLocaleString("ru-RU")}</span>
+                  <span className="mt-1 block sm:mt-0 sm:inline">Категория: {catMap[r.category] || r.category}</span>
+                  <span className="block sm:inline">Срочность: {r.urgency === "urgent" ? "Срочно" : "Обычно"}</span>
+                  <span className="mt-1 block sm:mt-0 sm:inline">Статус: <span className="admin-status-chip">{r.status}</span></span>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
                   <button
                     onClick={() => updateStatus(r.id, "new")}
                     className="admin-mini-btn"
@@ -205,37 +205,22 @@ export default function AdminClient() {
                 {r.message}
               </div>
 
-              <div className="mt-3 text-xs text-[#A7B3C2]">
-                {r.email ? (
-                  <>
-                    Email: <span className="text-[#E6EEF7]">{r.email}</span> ·{" "}
-                  </>
-                ) : null}
-                {r.name ? (
-                  <>
-                    Имя: <span className="text-[#E6EEF7]">{r.name}</span> ·{" "}
-                  </>
-                ) : null}
-                Телефон: <span className="text-[#E6EEF7]">{r.phone}</span> · Город:{" "}
-                <span className="text-[#E6EEF7]">{r.city === "izhevsk" ? "г. Ижевск" : "Другой"}</span>
+              <div className="mt-3 grid gap-1 text-xs text-[#A7B3C2] sm:block">
+                {r.email ? <div className="sm:inline">Email: <span className="text-[#E6EEF7]">{r.email}</span><span className="hidden sm:inline"> · </span></div> : null}
+                {r.name ? <div className="sm:inline">Имя: <span className="text-[#E6EEF7]">{r.name}</span><span className="hidden sm:inline"> · </span></div> : null}
+                <div className="sm:inline">Телефон: <span className="text-[#E6EEF7]">{r.phone}</span><span className="hidden sm:inline"> · </span></div>
+                <div className="sm:inline">Город: <span className="text-[#E6EEF7]">{r.city === "izhevsk" ? "г. Ижевск" : "Другой"}</span></div>
                 {r.city === "izhevsk" && r.meetingFormat ? (
-                  <>
-                    {" "}· Формат:{" "}
-                    <span className="text-[#E6EEF7]">
-                      {r.meetingFormat === "home_visit"
-                        ? "Нужно прийти"
-                        : r.meetingFormat === "self_visit"
-                          ? "Самостоятельно"
-                          : "Онлайн"}
-                    </span>
-                  </>
+                  <div className="sm:inline"><span className="hidden sm:inline"> · </span>Формат: <span className="text-[#E6EEF7]">
+                    {r.meetingFormat === "home_visit"
+                      ? "Нужно прийти"
+                      : r.meetingFormat === "self_visit"
+                        ? "Самостоятельно"
+                        : "Онлайн"}
+                  </span></div>
                 ) : null}
-                {r.address ? (
-                  <>
-                    {" "}· Адрес: <span className="text-[#E6EEF7]">{r.address}</span>
-                  </>
-                ) : null}
-                {" "}· {r.forWhom === "other" ? "За другого" : "За себя"}
+                {r.address ? <div className="sm:inline"><span className="hidden sm:inline"> · </span>Адрес: <span className="text-[#E6EEF7]">{r.address}</span></div> : null}
+                <div className="sm:inline"><span className="hidden sm:inline"> · </span>{r.forWhom === "other" ? "За другого" : "За себя"}</div>
               </div>
             </Card>
           ))}
