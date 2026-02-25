@@ -20,23 +20,36 @@ body{
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 a { color: inherit; text-decoration: none; }
 
-.container { width: min(1200px, 100% - 2rem); margin-inline: auto; }
-.site-main { padding: 2.25rem 0 6rem; }
+.container { width: min(1200px, 100% - 1.5rem); margin-inline: auto; }
+.site-main { padding: 2.25rem 0 6.8rem; }
 .home-stack { display: grid; gap: 2.5rem; }
 
 .site-nav { position: sticky; top: 0; z-index: 30; backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,.08); background: rgba(11,15,20,.65); }
 .site-nav-inner { display: flex; align-items: center; justify-content: space-between; min-height: 4rem; gap: 1rem; }
 .site-logo { display: flex; align-items: center; gap: .55rem; font-weight: 700; }
+.site-logo span { white-space: nowrap; }
 .site-logo-icon { width: 1.05rem; height: 1.05rem; display: block; filter: drop-shadow(0 0 6px rgba(34,211,238,.45)); }
 .site-nav-links { display: none; gap: 1.1rem; color: var(--muted); font-size: .95rem; }
 .site-nav-link:hover, .site-footer a:hover { color: #fff; }
 .site-nav-cta { display: none; }
-.mobile-cta-wrap { position: fixed; left: 0; right: 0; bottom: 1rem; z-index: 40; }
-.mobile-cta { width: 100%; justify-content: center; }
+.mobile-cta-wrap {
+  position: fixed;
+  right: 1rem;
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 40;
+}
+.mobile-cta {
+  width: auto;
+  justify-content: center;
+  border-radius: 999px;
+  padding: .9rem 1.25rem;
+  box-shadow: 0 12px 34px rgba(8, 145, 178, .35);
+}
 
 .hero-grid { display: grid; gap: 1.5rem; align-items: center; }
 .hero-title { font-size: clamp(2rem, 4.1vw, 3.3rem); line-height: 1.1; margin: 0; }
@@ -179,6 +192,7 @@ a { color: inherit; text-decoration: none; }
   background: linear-gradient(90deg, rgba(25,195,125,.24), rgba(34,211,238,.24));
   color: #eafff8;
 }
+.prayer-actions .ui-btn { width: 100%; justify-content: center; }
 .prayer-check-row { display: flex; gap: .65rem; align-items: center; }
 .prayer-check-soft { padding: .72rem .85rem; border: 1px solid rgba(255,255,255,.1); border-radius: .85rem; background: rgba(255,255,255,.02); }
 .prayer-checkbox {
@@ -271,8 +285,10 @@ input, select, textarea {
 textarea { min-height: 170px; }
 
 @media (min-width: 768px) {
+  .container { width: min(1200px, 100% - 2rem); }
   .site-nav-links, .site-nav-cta { display: inline-flex; }
   .mobile-cta-wrap { display: none; }
+  .site-main { padding-bottom: 6rem; }
   .hero-grid { grid-template-columns: 1.15fr .85fr; gap: 2rem; }
   .feature-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .topic-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -281,6 +297,7 @@ textarea { min-height: 170px; }
   .request-page { gap: 1.3rem; }
   .request-form-card, .request-privacy-card { padding: 1.45rem; }
   .prayer-grid-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .prayer-actions .ui-btn { width: auto; }
 }
 
 .section-kicker {
@@ -442,6 +459,10 @@ textarea { min-height: 170px; }
   gap: 1.25rem;
 }
 
+.admin-page * {
+  overflow-wrap: anywhere;
+}
+
 .admin-filter-card {
   border-color: rgba(34,211,238,.18);
   background: linear-gradient(180deg, rgba(34,211,238,.06), rgba(17,24,39,.68));
@@ -485,6 +506,8 @@ textarea { min-height: 170px; }
   background: rgba(15,23,42,.4);
   color: #e2e8f0;
   transition: background .2s ease, border-color .2s ease, transform .2s ease;
+  width: 100%;
+  justify-content: center;
 }
 
 .admin-mini-btn:hover {
@@ -530,5 +553,9 @@ textarea { min-height: 170px; }
     grid-template-columns: 220px minmax(0, 1fr);
     align-items: center;
     gap: .8rem;
+  }
+
+  .admin-mini-btn {
+    width: auto;
   }
 }
