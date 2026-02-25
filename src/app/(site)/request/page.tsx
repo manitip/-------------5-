@@ -1,10 +1,13 @@
 import FadeIn from "@/components/FadeIn";
 import { Card } from "@/components/Ui";
 import PrayerForm from "@/components/PrayerForm";
+import { siteText } from "@/content/siteText";
+
+const requestText = siteText.pages.request;
 
 export const metadata = {
-  title: "Попросить молитву",
-  description: "Форма запроса молитвенной поддержки. Можно анонимно.",
+  title: requestText.title,
+  description: requestText.metadataDescription,
 };
 
 export default function RequestPage() {
@@ -12,10 +15,8 @@ export default function RequestPage() {
     <div className="request-page">
       <FadeIn>
         <div className="request-hero">
-          <h1 className="request-title">Попросить молитву</h1>
-          <p className="request-subtitle">
-            Можно написать анонимно. Мы бережно относимся к вашей истории и не публикуем личные данные.
-          </p>
+          <h1 className="request-title">{requestText.title}</h1>
+          <p className="request-subtitle">{requestText.subtitle}</p>
         </div>
       </FadeIn>
 
@@ -27,11 +28,11 @@ export default function RequestPage() {
 
       <FadeIn>
         <Card className="request-privacy-card">
-          <div className="request-privacy-title">Приватность</div>
+          <div className="request-privacy-title">{requestText.privacyTitle}</div>
           <ul className="request-privacy-list">
-            <li>Не добавляйте чужие персональные данные (телефоны, адреса, документы).</li>
-            <li>Не пишите угрозы и призывы к насилию — такие сообщения блокируются.</li>
-            <li>Срок хранения заявок ограничен и настраивается (по умолчанию).</li>
+            {requestText.privacyItems.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
           </ul>
         </Card>
       </FadeIn>

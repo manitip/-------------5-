@@ -1,37 +1,37 @@
 import FadeIn from "@/components/FadeIn";
 import { Card } from "@/components/Ui";
+import { siteText } from "@/content/siteText";
 
-export const metadata = { title: "Контакты" };
+const contactsText = siteText.pages.contacts;
+
+export const metadata = { title: contactsText.title };
 
 export default function Contacts() {
   return (
     <div className="contacts-page">
       <FadeIn>
         <section className="contacts-hero">
-          <p className="section-kicker">Связаться с нами</p>
-          <h1 className="contacts-title">Контакты</h1>
-          <p className="contacts-subtitle">
-            Если вам удобнее написать напрямую, используйте email ниже. Мы стараемся отвечать
-            спокойно и по делу.
-          </p>
+          <p className="section-kicker">{contactsText.kicker}</p>
+          <h1 className="contacts-title">{contactsText.title}</h1>
+          <p className="contacts-subtitle">{contactsText.subtitle}</p>
         </section>
       </FadeIn>
 
       <FadeIn>
         <Card className="contacts-card">
           <div className="contacts-row">
-            <span className="contacts-label">Email</span>
-            <a className="contacts-link" href="mailto:team@example.com">team@example.com</a>
+            <span className="contacts-label">{contactsText.emailLabel}</span>
+            <a className="contacts-link" href={`mailto:${contactsText.email}`}>{contactsText.email}</a>
           </div>
 
           <div className="contacts-row">
-            <span className="contacts-label">Обычно отвечаем</span>
-            <span className="contacts-value">в течение 1–2 дней</span>
+            <span className="contacts-label">{contactsText.responseLabel}</span>
+            <span className="contacts-value">{contactsText.responseValue}</span>
           </div>
 
           <div className="contacts-row contacts-row-last">
-            <span className="contacts-label">Документы</span>
-            <a className="contacts-link" href="/privacy">Политика конфиденциальности</a>
+            <span className="contacts-label">{contactsText.documentsLabel}</span>
+            <a className="contacts-link" href="/privacy">{contactsText.privacyLabel}</a>
           </div>
         </Card>
       </FadeIn>

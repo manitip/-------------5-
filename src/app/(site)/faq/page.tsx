@@ -1,30 +1,24 @@
 import FadeIn from "@/components/FadeIn";
 import { Card } from "@/components/Ui";
+import { siteText } from "@/content/siteText";
 
-export const metadata = { title: "FAQ" };
+const faqText = siteText.pages.faq;
 
-const faq = [
-  { q: "Можно ли анонимно?", a: "Да. Включите “Анонимно” — имя и email не понадобятся." },
-  { q: "Можно ли без контактов?", a: "Да. Контакт нужен только если вы хотите подтверждение или ответ." },
-  { q: "Что нельзя писать?", a: "Угрозы, призывы к насилию, незаконную тематику и чужие персональные данные." },
-  { q: "Сколько ждать ответа?", a: "Ответ может не предусматриваться. Если вы оставили email — подтверждение возможно." },
-];
+export const metadata = { title: faqText.title };
 
 export default function FAQ() {
   return (
     <div className="faq-page">
       <FadeIn>
         <section className="faq-hero">
-          <p className="section-kicker">Полезно знать</p>
-          <h1 className="faq-title">FAQ</h1>
-          <p className="faq-subtitle">
-            Короткие ответы на самые частые вопросы перед отправкой просьбы о молитве.
-          </p>
+          <p className="section-kicker">{faqText.kicker}</p>
+          <h1 className="faq-title">{faqText.title}</h1>
+          <p className="faq-subtitle">{faqText.subtitle}</p>
         </section>
       </FadeIn>
 
       <div className="faq-grid">
-        {faq.map((item, idx) => (
+        {faqText.items.map((item, idx) => (
           <FadeIn key={item.q}>
             <Card className="faq-card">
               <div className="faq-card-top">
