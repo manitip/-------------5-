@@ -29,6 +29,17 @@ const catMap: Record<string, string> = {
   other: "Другое",
 };
 
+const statusLabel: Record<string, string> = {
+  new: "Новый",
+  praying: "В молитве",
+  done: "Завершено",
+};
+
+const urgencyLabel: Record<string, string> = {
+  urgent: "Срочно",
+  normal: "Обычно",
+};
+
 export default function AdminClient() {
   const [items, setItems] = useState<Req[]>([]);
   const [q, setQ] = useState("");
@@ -108,9 +119,20 @@ export default function AdminClient() {
         <div className="relative flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-cyan-200/80">Панель управления</p>
-            <h1 className="mt-1 text-2xl font-semibold md:text-3xl">Админка</h1>
-            <div className="mt-2 text-sm text-[#A7B3C2]">
-              Новые: {counters.new} · В молитве: {counters.praying} · Завершено: {counters.done}
+            <h1 className="mt-1 text-2xl font-semibold md:text-3xl">Заявки на молитву</h1>
+            <div className="admin-stats mt-3">
+              <div className="admin-stat-item">
+                <span className="admin-stat-item-label">Новые</span>
+                <span className="admin-stat-item-value">{counters.new}</span>
+              </div>
+              <div className="admin-stat-item">
+                <span className="admin-stat-item-label">В молитве</span>
+                <span className="admin-stat-item-value">{counters.praying}</span>
+              </div>
+              <div className="admin-stat-item">
+                <span className="admin-stat-item-label">Завершено</span>
+                <span className="admin-stat-item-value">{counters.done}</span>
+              </div>
             </div>
           </div>
 
@@ -122,9 +144,7 @@ export default function AdminClient() {
               Очистка по сроку
             </Button>
             <form action="/api/admin/logout" method="post">
-              <button className="ui-btn ui-btn-danger">
-                Выйти
-              </button>
+              <button className="ui-btn ui-btn-danger">Выйти</button>
             </form>
           </div>
         </div>
@@ -164,54 +184,44 @@ export default function AdminClient() {
           )}
 
           {items.map((r) => (
-            <Card key={r.id} className="border border-white/10 bg-gradient-to-b from-[#152033] to-[#0F1728] p-4 sm:p-5">
-              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-                <div className="text-sm text-[#A7B3C2]">
-                  <span className="block font-medium text-[#E6EEF7] sm:inline">{new Date(r.createdAt).toLocaleString("ru-RU")}</span>
-                  <span className="mt-1 block sm:mt-0 sm:inline">Категория: {catMap[r.category] || r.category}</span>
-                  <span className="block sm:inline">Срочность: {r.urgency === "urgent" ? "Срочно" : "Обычно"}</span>
-                  <span className="mt-1 block sm:mt-0 sm:inline">Статус: <span className="admin-status-chip">{r.status}</span></span>
+            <Card key={r.id} className="admin-request-card p-4 sm:p-5">
+              <div className="flex flex-col gap-3 border-b border-white/10 pb-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
+                <div className="admin-request-meta text-sm text-[#A7B3C2]">
+                  <span className="block font-medium text-[#E6EEF7]">{new Date(r.createdAt).toLocaleString("ru-RU")}</span>
+                  <span>Категория: {catMap[r.category] || r.category}</span>
+                  <span>Срочность: {urgencyLabel[r.urgency] || r.urgency}</span>
+                  <span>
+                    Статус: <span className={`admin-status-chip admin-status-chip-${r.status}`}>{statusLabel[r.status] || r.status}</span>
+                  </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
-                  <button
-                    onClick={() => updateStatus(r.id, "new")}
-                    className="admin-mini-btn"
-                  >
+                  <button onClick={() => updateStatus(r.id, "new")} className="admin-mini-btn">
                     Новый
                   </button>
-                  <button
-                    onClick={() => updateStatus(r.id, "praying")}
-                    className="admin-mini-btn"
-                  >
+                  <button onClick={() => updateStatus(r.id, "praying")} className="admin-mini-btn">
                     В молитве
                   </button>
-                  <button
-                    onClick={() => updateStatus(r.id, "done")}
-                    className="admin-mini-btn"
-                  >
+                  <button onClick={() => updateStatus(r.id, "done")} className="admin-mini-btn">
                     Завершено
                   </button>
-                  <button
-                    onClick={() => remove(r.id)}
-                    className="admin-mini-btn admin-mini-btn-danger"
-                  >
+                  <button onClick={() => remove(r.id)} className="admin-mini-btn admin-mini-btn-danger">
                     Удалить
                   </button>
                 </div>
               </div>
 
-              <div className="mt-3 whitespace-pre-wrap rounded-xl border border-white/5 bg-black/10 p-3 text-sm leading-relaxed text-[#E6EEF7]">
+              <div className="mt-4 whitespace-pre-wrap rounded-xl border border-white/5 bg-black/20 p-3.5 text-sm leading-relaxed text-[#E6EEF7]">
                 {r.message}
               </div>
 
-              <div className="mt-3 grid gap-1 text-xs text-[#A7B3C2] sm:block">
-                {r.email ? <div className="sm:inline">Email: <span className="text-[#E6EEF7]">{r.email}</span><span className="hidden sm:inline"> · </span></div> : null}
-                {r.name ? <div className="sm:inline">Имя: <span className="text-[#E6EEF7]">{r.name}</span><span className="hidden sm:inline"> · </span></div> : null}
-                <div className="sm:inline">Телефон: <span className="text-[#E6EEF7]">{r.phone}</span><span className="hidden sm:inline"> · </span></div>
-                <div className="sm:inline">Город: <span className="text-[#E6EEF7]">{r.city === "izhevsk" ? "г. Ижевск" : "Другой"}</span></div>
+              <div className="admin-request-details mt-4 grid gap-2 text-xs text-[#A7B3C2] sm:grid-cols-2 lg:grid-cols-3">
+                {r.email ? <div>📧 Email: <span className="text-[#E6EEF7]">{r.email}</span></div> : null}
+                {r.name ? <div>👤 Имя: <span className="text-[#E6EEF7]">{r.name}</span></div> : null}
+                <div>📞 Телефон: <span className="text-[#E6EEF7]">{r.phone}</span></div>
+                <div>📍 Город: <span className="text-[#E6EEF7]">{r.city === "izhevsk" ? "г. Ижевск" : "Другой"}</span></div>
                 {r.city === "izhevsk" && r.meetingFormat ? (
-                  <div className="sm:inline"><span className="hidden sm:inline"> · </span>Формат: <span className="text-[#E6EEF7]">
+                  <div>🤝 Формат: <span className="text-[#E6EEF7]">
                     {r.meetingFormat === "home_visit"
                       ? "Нужно прийти"
                       : r.meetingFormat === "self_visit"
@@ -219,8 +229,8 @@ export default function AdminClient() {
                         : "Онлайн"}
                   </span></div>
                 ) : null}
-                {r.address ? <div className="sm:inline"><span className="hidden sm:inline"> · </span>Адрес: <span className="text-[#E6EEF7]">{r.address}</span></div> : null}
-                <div className="sm:inline"><span className="hidden sm:inline"> · </span>{r.forWhom === "other" ? "За другого" : "За себя"}</div>
+                {r.address ? <div>🏠 Адрес: <span className="text-[#E6EEF7]">{r.address}</span></div> : null}
+                <div>🙏 {r.forWhom === "other" ? "За другого" : "За себя"}</div>
               </div>
             </Card>
           ))}
