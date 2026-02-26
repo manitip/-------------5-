@@ -8,9 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "prisma": "prisma",
-    "predev": "prisma generate",
-    "prebuild": "prisma generate",
-    "postinstall": "prisma generate"
+    "predev": "node scripts/prisma-generate.js",
+    "prebuild": "node scripts/prisma-generate.js",
+    "postinstall": "node scripts/prisma-generate.js"
   },
   "dependencies": {
     "@prisma/client": "latest",
