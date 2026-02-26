@@ -8,24 +8,60 @@ datasource db {
 }
 
 model PrayerRequest {
-  id         String   @id @default(cuid())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  category   String
-  urgency    String   @default("usual") // usual | urgent
-  forWhom    String   @default("self")  // self | other
+  category      String
+  urgency       String   @default("usual") // usual | urgent
+  forWhom       String   @default("self") // self | other
 
-  message    String
-  name       String?
-  email      String?
-  phone      String
-  city       String   @default("izhevsk") // izhevsk | other
+  message       String
+  name          String?
+  email         String?
+  phone         String
+  city          String   @default("izhevsk") // izhevsk | other
   meetingFormat String? // home_visit | self_visit | online
-  address    String?
+  address       String?
 
-  status     String   @default("new")   // new | praying | done
-  ipHash     String?                    // не храним IP напрямую
+  status        String   @default("new") // new | praying | done
+  ipHash        String? // не храним IP напрямую
 
-  deletedAt  DateTime?
+  deletedAt     DateTime?
+
+  messages      PrayerMessage[]
+  replyAliases  PrayerReplyAlias[]
+}
+
+model PrayerMessage {
+  id                String   @id @default(cuid())
+  prayerRequestId   String
+  prayerRequest     PrayerRequest @relation(fields: [prayerRequestId], references: [id], onDelete: Cascade)
+
+  direction         String // incoming | outgoing
+  fromEmail         String
+  toEmail           String
+  subject           String
+  text              String
+  html              String?
+  providerMessageId String?
+  inReplyTo         String?
+  references        String?
+  status            String   @default("queued") // queued | sent | failed | received
+  error             String?
+  createdAt         DateTime @default(now())
+
+  @@index([prayerRequestId, createdAt])
+}
+
+model PrayerReplyAlias {
+  id              String   @id @default(cuid())
+  prayerRequestId String
+  prayerRequest   PrayerRequest @relation(fields: [prayerRequestId], references: [id], onDelete: Cascade)
+
+  token           String
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+
+  @@index([prayerRequestId, isActive])
 }

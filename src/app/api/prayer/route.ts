@@ -108,12 +108,13 @@ export async function POST(req: NextRequest) {
       category: created.category,
       urgency: created.urgency,
       createdAt: created.createdAt.toISOString(),
+      preview: data.message.trim().slice(0, 140),
     });
   } catch {}
 
   // Подтверждение пользователю (если оставил email)
   if (created.email) {
-    try { await confirmUser(created.email); } catch {}
+    try { await confirmUser({ email: created.email, requestId: created.id }); } catch {}
   }
 
   return NextResponse.json({ ok: true, id: created.id }, { status: 201 });
