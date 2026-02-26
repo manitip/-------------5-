@@ -124,26 +124,54 @@ export default function PrayerForm() {
   const [address, setAddress] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const [consent, setConsent] = useState<boolean>(false);
+  const [attemptedSubmit, setAttemptedSubmit] = useState<boolean>(false);
 
   const [hp, setHp] = useState<string>("");
 
   const count = message.length;
   const okLen = count >= 300 && count <= 1500;
-  const phoneOk = phone.trim().length >= 6;
+  const phoneDigits = phone.replace(/\D/g, "");
+  const phoneOk = phoneDigits.length === 11;
   const addressNeeded = city === "izhevsk" && meetingFormat === "home_visit";
   const addressOk = !addressNeeded || address.trim().length >= 10;
+  const requiredInvalid = {
+    phone: !phoneOk,
+    address: addressNeeded && !addressOk,
+    message: !okLen,
+    consent: !consent,
+  };
+  const hasRequiredInvalid = Object.values(requiredInvalid).some(Boolean);
 
   const disabled = useMemo(() => {
     if (status === "sending") return true;
-    if (!consent) return true;
-    if (!okLen) return true;
-    if (!phoneOk) return true;
-    if (!addressOk) return true;
     return false;
-  }, [status, consent, okLen, phoneOk, addressOk]);
+  }, [status]);
+
+  function formatPhone(value: string) {
+    const digits = value.replace(/\D/g, "").slice(0, 11);
+    const normalized = digits.startsWith("8") ? `7${digits.slice(1)}` : digits;
+
+    if (!normalized) return "";
+
+    const d = normalized;
+    let out = "+7";
+    if (d.length > 1) out += ` ${d.slice(1, 4)}`;
+    if (d.length > 4) out += `-${d.slice(4, 7)}`;
+    if (d.length > 7) out += `-${d.slice(7, 9)}`;
+    if (d.length > 9) out += `-${d.slice(9, 11)}`;
+    return out;
+  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setAttemptedSubmit(true);
+
+    if (hasRequiredInvalid) {
+      setStatus("error");
+      setErr("Заполните обязательные поля.");
+      return;
+    }
+
     setErr("");
     setStatus("sending");
 
@@ -286,10 +314,10 @@ export default function PrayerForm() {
         <label className="prayer-field">
           <span className="prayer-label">Телефон (обязательно)</span>
           <input
-            className="prayer-input"
+            className={`prayer-input ${attemptedSubmit && requiredInvalid.phone ? "prayer-input-invalid" : ""}`}
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="+7 (___) ___-__-__"
+            onChange={(e) => setPhone(formatPhone(e.target.value))}
+            placeholder="+7 900-123-45-67"
             aria-label="Телефон"
             required
           />
@@ -322,7 +350,7 @@ export default function PrayerForm() {
             <label className="prayer-field">
               <span className="prayer-label">Полный адрес (обязательно)</span>
               <input
-                className="prayer-input"
+                className={`prayer-input ${attemptedSubmit && requiredInvalid.address ? "prayer-input-invalid" : ""}`}
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Город, улица, дом, квартира, подъезд"
@@ -344,7 +372,7 @@ export default function PrayerForm() {
           </span>
         </span>
         <textarea
-          className="prayer-input prayer-textarea"
+          className={`prayer-input prayer-textarea ${attemptedSubmit && requiredInvalid.message ? "prayer-input-invalid" : ""}`}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Можно кратко. Напишите так, как получается."
@@ -364,7 +392,7 @@ export default function PrayerForm() {
           type="checkbox"
           checked={consent}
           onChange={(e) => setConsent(e.target.checked)}
-          className="prayer-checkbox prayer-checkbox-consent"
+          className={`prayer-checkbox prayer-checkbox-consent ${attemptedSubmit && requiredInvalid.consent ? "prayer-checkbox-invalid" : ""}`}
           aria-label="Согласие с политикой"
         />
         <span className="prayer-label">

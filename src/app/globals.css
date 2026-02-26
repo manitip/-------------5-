@@ -129,6 +129,10 @@ a { color: inherit; text-decoration: none; }
   box-shadow: 0 0 0 3px rgba(34,211,238,.16);
   background: rgba(9,17,29,.75);
 }
+.prayer-input-invalid {
+  border-color: rgba(251,113,133,.9);
+  box-shadow: 0 0 0 3px rgba(251,113,133,.16);
+}
 .prayer-textarea { min-height: 220px; resize: vertical; line-height: 1.55; }
 .prayer-switch-row { display: flex; gap: .55rem; }
 .prayer-choice-btn {
@@ -243,6 +247,10 @@ a { color: inherit; text-decoration: none; }
   border-color: rgba(25,195,125,.9);
   background: linear-gradient(180deg, #34D399, #19C37D);
   box-shadow: 0 0 0 3px rgba(25,195,125,.18);
+}
+.prayer-checkbox-invalid {
+  border-color: rgba(251,113,133,.9);
+  box-shadow: 0 0 0 3px rgba(251,113,133,.18);
 }
 .prayer-check-row .prayer-label { line-height: 1.25; margin: 0; }
 .prayer-message-label-row { display: flex; justify-content: space-between; gap: .75rem; align-items: center; }
