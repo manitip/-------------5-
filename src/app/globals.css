@@ -432,6 +432,24 @@ textarea { min-height: 170px; }
   line-height: 1.6;
 }
 
+
+.about-bottom-card {
+  padding: 1.1rem;
+  text-align: left;
+}
+
+.about-bottom-title {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.35;
+}
+
+.about-bottom-text {
+  margin: .65rem 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .contacts-card {
   padding: 1rem 1.15rem;
   border-color: rgba(25,195,125,.25);
@@ -554,7 +572,8 @@ textarea { min-height: 170px; }
   .about-note-card,
   .contacts-card,
   .faq-card,
-  .about-value-card {
+  .about-value-card,
+  .about-bottom-card {
     padding: 1.25rem 1.3rem;
   }
 

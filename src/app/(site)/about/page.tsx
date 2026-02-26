@@ -7,13 +7,21 @@ const aboutText = siteText.pages.about;
 export const metadata = { title: "О нас" };
 
 export default function About() {
+  const bibleQuote = "И всё, чего ни попросите в молитве с верою, получите (Матфея 21:22).";
+  const hasBibleQuote = aboutText.subtitle.includes(bibleQuote);
+  const [beforeQuote, afterQuote] = hasBibleQuote ? aboutText.subtitle.split(bibleQuote) : [aboutText.subtitle, ""];
+
   return (
     <div className="about-page">
       <FadeIn>
         <section className="about-hero">
           <p className="section-kicker">{aboutText.kicker}</p>
           <h1 className="about-title">{aboutText.title}</h1>
-          <p className="about-subtitle">{aboutText.subtitle}</p>
+          <p className="about-subtitle">
+            {beforeQuote}
+            {hasBibleQuote ? <strong>{bibleQuote}</strong> : null}
+            {afterQuote}
+          </p>
         </section>
       </FadeIn>
 
