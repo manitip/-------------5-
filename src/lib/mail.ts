@@ -12,13 +12,54 @@ function required(name: string) {
   return v;
 }
 
-export function mailer() {
+const TEST_MODE = env("SMTP_TEST_MODE", "0") === "1";
+
+async function createTransporter() {
+  const host = env("SMTP_HOST");
+  const port = Number(env("SMTP_PORT", "587"));
+  const user = env("SMTP_USER");
+  const pass = env("SMTP_PASS");
+
+  if (host && user && pass) {
+    return nodemailer.createTransport({
+      host,
+      port,
+      secure: port === 465,
+      auth: { user, pass },
+    });
+  }
+
+  if (!TEST_MODE) {
+    throw new Error("Missing SMTP config. Set SMTP_HOST/SMTP_USER/SMTP_PASS or enable SMTP_TEST_MODE=1");
+  }
+
+  const account = await nodemailer.createTestAccount();
   return nodemailer.createTransport({
-    host: required("SMTP_HOST"),
-    port: Number(required("SMTP_PORT") || 587),
-    secure: false,
-    auth: { user: required("SMTP_USER"), pass: required("SMTP_PASS") },
+    host: account.smtp.host,
+    port: account.smtp.port,
+    secure: account.smtp.secure,
+    auth: {
+      user: account.user,
+      pass: account.pass,
+    },
   });
+}
+
+export function mailer() {
+  return createTransporter();
+}
+
+function targetEmail(email: string) {
+  const testTo = env("SMTP_TEST_TO").trim();
+  if (TEST_MODE && testTo) return testTo;
+  return email;
+}
+
+function printPreviewIfAvailable(info: unknown) {
+  const url = nodemailer.getTestMessageUrl(info as any);
+  if (TEST_MODE && url) {
+    console.info(`[mail:test] Preview URL: ${url}`);
+  }
 }
 
 function requestLink(id: string) {
@@ -30,7 +71,7 @@ export async function notifyTeamMinimal(data: { id: string; category: string; ur
   const to = required("TEAM_NOTIFY_EMAIL");
   const from = required("MAIL_FROM");
   const includePreview = env("ADMIN_EMAIL_INCLUDE_PREVIEW", "0") === "1";
-  const t = mailer();
+  const t = await mailer();
 
   const subject = `Новая заявка на молитву: ${data.category} / ${data.urgency}`;
   const text = [
@@ -54,12 +95,13 @@ export async function notifyTeamMinimal(data: { id: string; category: string; ur
     </div>
   `;
 
-  await t.sendMail({ from, to, subject, text, html });
+  const info = await t.sendMail({ from, to: targetEmail(to), subject, text, html });
+  printPreviewIfAvailable(info);
 }
 
 export async function confirmUser(input: { email: string; requestId: string }) {
   const from = required("MAIL_FROM");
-  const t = mailer();
+  const t = await mailer();
   const subject = "Мы получили ваш запрос о молитве";
   const text =
     `Здравствуйте.\n\n` +
@@ -77,7 +119,8 @@ export async function confirmUser(input: { email: string; requestId: string }) {
     </div>
   `;
 
-  await t.sendMail({ from, to: input.email, subject, text, html });
+  const info = await t.sendMail({ from, to: targetEmail(input.email), subject, text, html });
+  printPreviewIfAvailable(info);
 }
 
 async function getOrCreateAlias(prayerRequestId: string) {
@@ -100,7 +143,7 @@ function messageId(prayerRequestId: string) {
 
 export async function sendManualReply(input: { prayerRequestId: string; toEmail: string; subject: string; text: string }) {
   const from = required("MAIL_FROM");
-  const t = mailer();
+  const t = await mailer();
 
   const alias = await getOrCreateAlias(input.prayerRequestId);
   const replyDomain = env("MAIL_REPLY_DOMAIN") || env("INBOUND_ALLOWED_DOMAIN");
@@ -117,9 +160,9 @@ export async function sendManualReply(input: { prayerRequestId: string; toEmail:
   const refs = [previous[0]?.references, inReplyTo].filter(Boolean).join(" ") || null;
 
   try {
-    await t.sendMail({
+    const info = await t.sendMail({
       from,
-      to: input.toEmail,
+      to: targetEmail(input.toEmail),
       subject: input.subject,
       text: input.text,
       html: `<div style="font-family:Inter,Arial,sans-serif;line-height:1.6;white-space:pre-wrap">${input.text.replace(/</g, "&lt;")}</div>`,
@@ -128,6 +171,7 @@ export async function sendManualReply(input: { prayerRequestId: string; toEmail:
       inReplyTo: inReplyTo || undefined,
       references: refs || undefined,
     });
+    printPreviewIfAvailable(info);
 
     await prisma.prayerRequest.update({ where: { id: input.prayerRequestId }, data: { status: "praying" } });
     await prisma.prayerMessage.create({
