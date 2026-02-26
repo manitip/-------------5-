@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
   const name = data.anonymous ? null : (data.name?.trim() || null);
   const email = data.anonymous ? null : (data.email?.trim() || null);
   const city = data.city;
-  const meetingFormat = city === "izhevsk" ? data.meetingFormat : null;
+  const meetingFormat = city === "izhevsk" ? (data.meetingFormat ?? null) : null;
   const address = city === "izhevsk" && meetingFormat === "home_visit" ? (data.address?.trim() || null) : null;
 
   const created = await prisma.prayerRequest.create({
