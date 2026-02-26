@@ -10,7 +10,7 @@ export const PrayerSchema = z.object({
   message: z.string().min(300).max(1500),
   name: z.string().max(80).optional().or(z.literal("")),
   email: z.string().email().max(120).optional().or(z.literal("")),
-  phone: z.string().min(6).max(40),
+  phone: z.string().min(6).max(40).refine((val) => val.replace(/\D/g, "").length === 11, "Укажите телефон в формате +7 900-123-45-67"),
   anonymous: z.boolean().optional().default(false),
   consent: z.boolean().refine(v => v === true, "Нужно согласие с политикой"),
   // антиспам
