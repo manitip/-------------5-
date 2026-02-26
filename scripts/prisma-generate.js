@@ -20,23 +20,37 @@ function hasGeneratedClient() {
   return existsSync('node_modules/.prisma/client/index.js');
 }
 
+function runPrismaGenerate(args) {
+  const command = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+  const result = spawnSync(command, args, { stdio: 'inherit' });
+  return result.status ?? 1;
+}
+
 const nodeMajor = major(process.version);
 const prismaMajor = major(readPrismaVersion());
 
 if (nodeMajor < 22 && prismaMajor >= 7) {
+  console.warn(
+    `Detected Prisma ${prismaMajor} on Node.js ${process.version}. Falling back to Prisma 6 for client generation.`
+  );
+
+  const fallbackStatus = runPrismaGenerate(['prisma@6', 'generate']);
+
+  if (fallbackStatus === 0) {
+    process.exit(0);
+  }
+
   if (hasGeneratedClient()) {
     console.warn(
-      `Skipping \`prisma generate\`: Prisma ${prismaMajor} requires Node.js 22+ for generation in this setup, but current runtime is ${process.version}. Using already-generated client.`
+      `Fallback generation failed, but an existing Prisma Client was found. Continuing with the generated client.`
     );
     process.exit(0);
   }
 
   console.error(
-    `Cannot run \`prisma generate\` with Prisma ${prismaMajor} on ${process.version}. Please use Node.js 22+ or pin Prisma to v6.`
+    'Could not generate Prisma Client on Node.js <22. Use Node.js 22+, or install Prisma 6 and run `npx prisma generate` again.'
   );
-  process.exit(1);
+  process.exit(fallbackStatus);
 }
 
-const command = process.platform === 'win32' ? 'npx.cmd' : 'npx';
-const result = spawnSync(command, ['prisma', 'generate'], { stdio: 'inherit' });
-process.exit(result.status ?? 1);
+process.exit(runPrismaGenerate(['prisma', 'generate']));
