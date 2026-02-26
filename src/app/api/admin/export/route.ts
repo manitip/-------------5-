@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { ensurePrayerSchema, prisma } from "@/lib/db";
 import { readSession } from "@/lib/auth";
 
 function csvEscape(v: any) {
@@ -9,6 +9,7 @@ function csvEscape(v: any) {
 }
 
 export async function GET() {
+  await ensurePrayerSchema();
   if (!(await readSession())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const rows = await prisma.prayerRequest.findMany({

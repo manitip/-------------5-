@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { PrayerSchema } from "@/lib/validate";
-import { prisma } from "@/lib/db";
+import { ensurePrayerSchema, prisma } from "@/lib/db";
 import { rateLimit } from "@/lib/rateLimit";
 import { confirmUser, notifyTeamMinimal } from "@/lib/mail";
 
@@ -45,6 +45,7 @@ async function verifyCaptcha(token: string) {
 }
 
 export async function POST(req: NextRequest) {
+  await ensurePrayerSchema();
   const ip = ipFrom(req);
   const limit = Number(process.env.RATE_LIMIT_PER_MIN || 3);
   const rl = rateLimit(`prayer:${ip}`, limit);

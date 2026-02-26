@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { ensurePrayerSchema, prisma } from "@/lib/db";
 import { readSession } from "@/lib/auth";
 
 async function guard() {
@@ -8,6 +8,7 @@ async function guard() {
 }
 
 export async function GET(req: NextRequest) {
+  await ensurePrayerSchema();
   if (!(await guard())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { searchParams } = new URL(req.url);
@@ -52,6 +53,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
+  await ensurePrayerSchema();
   if (!(await guard())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json().catch(() => null);
@@ -67,6 +69,7 @@ export async function PATCH(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  await ensurePrayerSchema();
   if (!(await guard())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json().catch(() => null);
