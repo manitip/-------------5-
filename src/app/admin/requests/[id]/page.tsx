@@ -18,14 +18,20 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
 
   return (
     <div className="space-y-4">
-      <Link href="/admin" className="text-sm text-cyan-200 hover:text-cyan-100">← К списку</Link>
+      <div className="admin-breadcrumbs">
+        <Link href="/" className="admin-top-link">← На сайт</Link>
+        <Link href="/admin" className="admin-top-link">Админ-панель</Link>
+        <Link href="/admin" className="admin-top-link">← К списку</Link>
+      </div>
       <div className="admin-request-layout">
         <section className="admin-request-card space-y-3">
           <h1 className="admin-title text-2xl">Заявка {request.id.slice(0, 8)}</h1>
-          <div className="text-sm text-[#a8b7cb]">{formatDate(request.createdAt)}</div>
-          <div>Категория: {catMap[request.category] || request.category}</div>
-          <div>Срочность: {urgencyLabel[request.urgency] || request.urgency}</div>
-          <div>Статус: <span className={`admin-status-chip admin-status-chip-${request.status}`}>{statusLabel[request.status] || request.status}</span></div>
+          <div className="admin-request-badges">
+            <div className="text-sm text-[#a8b7cb]">{formatDate(request.createdAt)}</div>
+            <div>Категория: {catMap[request.category] || request.category}</div>
+            <div>Срочность: {urgencyLabel[request.urgency] || request.urgency}</div>
+            <div>Статус: <span className={`admin-status-chip admin-status-chip-${request.status}`}>{statusLabel[request.status] || request.status}</span></div>
+          </div>
           <div className="admin-request-details">
             <div>👤 {request.name || "Не указано"}</div>
             <div>📧 {request.email || "Не указано"}</div>
@@ -35,7 +41,10 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
             <div>🙏 {request.forWhom === "other" ? "За другого" : "За себя"}</div>
             <div>🔐 Тех. ipHash: {request.ipHash || "—"}</div>
           </div>
-          <div className="whitespace-pre-wrap rounded-xl border border-white/10 bg-black/20 p-3">{request.message}</div>
+          <div className="admin-message-block">
+            <p className="admin-small-label">Текст заявки</p>
+            <div className="whitespace-pre-wrap rounded-xl border border-white/10 bg-black/20 p-3">{request.message}</div>
+          </div>
 
           <div className="admin-actions-wrap">
             <form action="/admin/actions/status" method="post"><input type="hidden" name="id" value={request.id} /><input type="hidden" name="status" value="new" /><button className="admin-mini-btn">Новый</button></form>
@@ -43,8 +52,8 @@ export default async function RequestPage({ params, searchParams }: { params: Pr
             <form action="/admin/actions/status" method="post"><input type="hidden" name="id" value={request.id} /><input type="hidden" name="status" value="done" /><button className="admin-mini-btn">Завершено</button></form>
             <form action="/admin/actions/delete" method="post"><input type="hidden" name="id" value={request.id} /><button className="admin-mini-btn admin-mini-btn-danger">Удалить</button></form>
           </div>
-          {sp?.ok ? <div className="text-emerald-300 text-sm">Письмо отправлено.</div> : null}
-          {sp?.error ? <div className="text-red-300 text-sm">{sp.error}</div> : null}
+          {sp?.ok ? <div className="admin-notice admin-notice-ok">Письмо отправлено.</div> : null}
+          {sp?.error ? <div className="admin-notice admin-notice-error">{sp.error}</div> : null}
         </section>
 
         <section id="thread" className="admin-request-card space-y-3">
