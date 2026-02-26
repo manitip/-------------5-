@@ -13,7 +13,7 @@
     "postinstall": "node scripts/prisma-generate.js"
   },
   "dependencies": {
-    "@prisma/client": "latest",
+    "@prisma/client": "^6.0.0",
     "bcryptjs": "latest",
     "framer-motion": "latest",
     "jsonwebtoken": "latest",
@@ -33,7 +33,7 @@
     "eslint": "latest",
     "eslint-config-next": "latest",
     "postcss": "latest",
-    "prisma": "latest",
+    "prisma": "^6.0.0",
     "tailwindcss": "latest",
     "typescript": "latest"
   }
