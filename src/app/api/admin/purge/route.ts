@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { ensurePrayerSchema, prisma } from "@/lib/db";
 import { readSession } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
+  await ensurePrayerSchema();
   if (!(await readSession())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json().catch(() => null);
